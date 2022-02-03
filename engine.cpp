@@ -57,6 +57,7 @@ void Engine::mainLoop() {
 }
 
 void Engine::cleanup() {
+    vkDestroyInstance(instance, nullptr);
     glfwDestroyWindow(window);
     glfwTerminate();
 }
