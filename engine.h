@@ -19,6 +19,7 @@ public:
 private:
     void initWindow();
     void initVulkan();
+    void createInstance();
     void mainLoop();
     void cleanup();
 
@@ -27,6 +28,8 @@ private:
     const char* WINDOW_TITLE = "Shattered Souls";
 
     GLFWwindow* window;
+
+    VkInstance instance;
 };
 
 

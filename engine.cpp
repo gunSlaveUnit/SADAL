@@ -23,6 +23,10 @@ void Engine::initWindow() {
 }
 
 void Engine::initVulkan() {
+    createInstance();
+}
+
+void Engine::createInstance() {
 
 }
 
