@@ -9,6 +9,9 @@
 
 #include <cstdint>
 
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
+
 class Engine {
 public:
     void run();
@@ -20,6 +23,8 @@ private:
 
     const uint16_t WINDOW_WIDTH = 800;
     const uint16_t WINDOW_HEIGHT = 600;
+
+    GLFWwindow* window;
 };
 
 
