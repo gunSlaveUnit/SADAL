@@ -27,7 +27,13 @@ void Engine::initVulkan() {
 }
 
 void Engine::createInstance() {
-
+    VkApplicationInfo appInfo;
+    appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+    appInfo.pEngineName = "No engine";
+    appInfo.engineVersion = VK_MAKE_VERSION(0, 0, 1);
+    appInfo.pApplicationName = WINDOW_TITLE;
+    appInfo.applicationVersion = VK_MAKE_VERSION(0, 0, 1);
+    appInfo.apiVersion = VK_API_VERSION_1_2;
 }
 
 void Engine::mainLoop() {
