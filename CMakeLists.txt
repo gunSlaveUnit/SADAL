@@ -3,7 +3,7 @@ project(ShatteredSouls)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(ShatteredSouls main.cpp)
+add_executable(ShatteredSouls main.cpp engine.cpp engine.h)
 
 find_package(glm REQUIRED FATAL_ERROR)
 include_directories(${GLM_INCLUDE_DIRS})
