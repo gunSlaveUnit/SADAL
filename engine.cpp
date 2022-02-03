@@ -27,7 +27,8 @@ void Engine::initVulkan() {
 }
 
 void Engine::mainLoop() {
-
+    while(!glfwWindowShouldClose(window))
+        glfwPollEvents();
 }
 
 void Engine::cleanup() {
