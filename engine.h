@@ -7,6 +7,7 @@
 #ifndef SHATTEREDSOULS_ENGINE_H
 #define SHATTEREDSOULS_ENGINE_H
 
+#include <iostream>
 #include <cstdint>
 
 #define GLFW_INCLUDE_VULKAN
