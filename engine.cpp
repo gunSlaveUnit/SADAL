@@ -32,5 +32,6 @@ void Engine::mainLoop() {
 }
 
 void Engine::cleanup() {
-
+    glfwDestroyWindow(window);
+    glfwTerminate();
 }
