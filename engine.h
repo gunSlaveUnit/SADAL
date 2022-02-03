@@ -23,6 +23,7 @@ private:
 
     const uint16_t WINDOW_WIDTH = 800;
     const uint16_t WINDOW_HEIGHT = 600;
+    const char* WINDOW_TITLE = "Shattered Souls";
 
     GLFWwindow* window;
 };
