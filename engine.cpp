@@ -5,9 +5,14 @@
 #include "engine.h"
 
 void Engine::run() {
+    initWindow();
     initVulkan();
     mainLoop();
     cleanup();
+}
+
+void Engine::initWindow() {
+
 }
 
 void Engine::initVulkan() {
