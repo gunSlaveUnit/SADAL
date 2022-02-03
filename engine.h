@@ -7,6 +7,7 @@
 #ifndef SHATTEREDSOULS_ENGINE_H
 #define SHATTEREDSOULS_ENGINE_H
 
+#include <cstdint>
 
 class Engine {
 public:
@@ -15,6 +16,9 @@ private:
     void initVulkan();
     void mainLoop();
     void cleanup();
+
+    const uint16_t WINDOW_WIDTH = 800;
+    const uint16_t WINDOW_HEIGHT = 600;
 };
 
 
