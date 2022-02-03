@@ -27,6 +27,9 @@ void Engine::initVulkan() {
 }
 
 void Engine::createInstance() {
+    if(enableValidationLayers && !checkValidationLayerSupport())
+        throw std::runtime_error("ERROR: Vulkan validation layers requested, but not available");
+
     VkApplicationInfo appInfo{};
     appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     appInfo.pEngineName = "No engine";
@@ -49,6 +52,28 @@ void Engine::createInstance() {
 
     if(vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS)
         throw std::runtime_error("ERROR: Vulkan can't create instance");
+}
+
+bool Engine::checkValidationLayerSupport() {
+    uint32_t layerCount;
+    vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
+
+    std::vector<VkLayerProperties> availableLayers(layerCount);
+    vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
+
+    for(const char* layerName : validationLayers) {
+        bool layerFound = false;
+
+        for(const auto& availableLayer : availableLayers)
+            if(!strcmp(layerName, availableLayer.layerName)) {
+                layerFound = true;
+                break;
+            }
+
+        if(!layerFound) return false;
+    }
+
+    return true;
 }
 
 void Engine::mainLoop() {

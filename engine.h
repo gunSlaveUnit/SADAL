@@ -10,6 +10,7 @@
 #include <iostream>
 #include <cstdint>
 #include <vector>
+#include <cstring>
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
@@ -21,6 +22,7 @@ private:
     void initWindow();
     void initVulkan();
     void createInstance();
+    bool checkValidationLayerSupport();
     void mainLoop();
     void cleanup();
 
