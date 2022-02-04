@@ -102,7 +102,8 @@ void Engine::pickPhysicalDevice() {
 }
 
 bool Engine::isPhysicalDeviceSuitable(VkPhysicalDevice const &physicalDevice) {
-    return true;
+    QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
+    return indices.isQueueFamilyAvailable();
 }
 
 Engine::QueueFamilyIndices Engine::findQueueFamilies(VkPhysicalDevice const &physicalDevice) {
