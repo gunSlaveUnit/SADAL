@@ -108,7 +108,18 @@ bool Engine::isPhysicalDeviceSuitable(VkPhysicalDevice const &physicalDevice) {
 Engine::QueueFamilyIndices Engine::findQueueFamilies(VkPhysicalDevice const &physicalDevice) {
     QueueFamilyIndices indices;
 
+    uint32_t queueFamilyCount = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, nullptr);
 
+    std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, queueFamilies.data());
+
+    int graphicsFamilyIndex = 0;
+    for(const auto& queueFamily : queueFamilies) {
+        if(queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+            indices.graphicsFamily = graphicsFamilyIndex;
+        ++graphicsFamilyIndex;
+    }
 
     return indices;
 }
