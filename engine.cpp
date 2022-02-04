@@ -19,7 +19,7 @@ void Engine::initWindow() {
 
     window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, nullptr, nullptr);
     if (!window)
-        std::cerr<<"ERROR: GLFW can't create window"<<std::endl;
+        throw std::runtime_error("ERROR: GLFW can't create window");
 }
 
 void Engine::initVulkan() {
