@@ -26,6 +26,7 @@ private:
     bool checkValidationLayerSupport();
     void pickPhysicalDevice();
     bool isPhysicalDeviceSuitable(const VkPhysicalDevice& physicalDevice);
+    void createLogicalDevice();
     struct QueueFamilyIndices {
         [[nodiscard]] bool isQueueFamilyAvailable() const {
             return graphicsFamily.has_value();
