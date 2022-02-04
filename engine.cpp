@@ -24,7 +24,7 @@ void Engine::initWindow() {
 
 void Engine::initVulkan() {
     createInstance();
-    pickUpPhysicalDevice();
+    pickPhysicalDevice();
 }
 
 void Engine::createInstance() {
@@ -81,7 +81,7 @@ bool Engine::checkValidationLayerSupport() {
     return true;
 }
 
-void Engine::pickUpPhysicalDevice() {
+void Engine::pickPhysicalDevice() {
     uint32_t physicalDeviceCount = 0;
     vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, nullptr);
 

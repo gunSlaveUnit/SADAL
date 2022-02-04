@@ -23,7 +23,7 @@ private:
     void initVulkan();
     void createInstance();
     bool checkValidationLayerSupport();
-    void pickUpPhysicalDevice();
+    void pickPhysicalDevice();
     void mainLoop();
     void cleanup();
 
