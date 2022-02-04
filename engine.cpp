@@ -90,6 +90,15 @@ void Engine::pickPhysicalDevice() {
 
     std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
     vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, physicalDevices.data());
+
+    for(const auto& device : physicalDevices)
+        if(isPhysicalDeviceSuitable(device)) {
+            physicalDevice = device;
+            break;
+        }
+
+    if(physicalDevice == VK_NULL_HANDLE)
+        throw std::runtime_error("ERROR: Failed to find a suitable GPU");
 }
 
 bool Engine::isPhysicalDeviceSuitable(VkPhysicalDevice const &physicalDevice) {
