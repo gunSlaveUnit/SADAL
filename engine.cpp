@@ -86,7 +86,7 @@ void Engine::pickPhysicalDevice() {
     vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, nullptr);
 
     if(!physicalDeviceCount)
-        throw std::runtime_error("ERROR: Can't find a physical GPU device with Vulkan support");
+        throw std::runtime_error("ERROR: Failed find a physical GPU device with Vulkan support");
 
     std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
     vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, physicalDevices.data());
