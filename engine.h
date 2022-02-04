@@ -27,6 +27,10 @@ private:
     void pickPhysicalDevice();
     bool isPhysicalDeviceSuitable(const VkPhysicalDevice& physicalDevice);
     struct QueueFamilyIndices {
+        [[nodiscard]] bool isQueueFamilyAvailable() const {
+            return graphicsFamily.has_value();
+        }
+
         std::optional<uint32_t> graphicsFamily;
     };
     QueueFamilyIndices findQueueFamilies(const VkPhysicalDevice& physicalDevice);
