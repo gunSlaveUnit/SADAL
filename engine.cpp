@@ -105,6 +105,14 @@ bool Engine::isPhysicalDeviceSuitable(VkPhysicalDevice const &physicalDevice) {
     return true;
 }
 
+Engine::QueueFamilyIndices Engine::findQueueFamilies(VkPhysicalDevice const &physicalDevice) {
+    QueueFamilyIndices indices;
+
+
+
+    return indices;
+}
+
 void Engine::mainLoop() {
     while(!glfwWindowShouldClose(window))
         glfwPollEvents();

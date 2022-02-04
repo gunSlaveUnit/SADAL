@@ -11,6 +11,7 @@
 #include <cstdint>
 #include <vector>
 #include <cstring>
+#include <optional>
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
@@ -25,6 +26,10 @@ private:
     bool checkValidationLayerSupport();
     void pickPhysicalDevice();
     bool isPhysicalDeviceSuitable(const VkPhysicalDevice& physicalDevice);
+    struct QueueFamilyIndices {
+        std::optional<uint32_t> graphicsFamily;
+    };
+    QueueFamilyIndices findQueueFamilies(const VkPhysicalDevice& physicalDevice);
     void mainLoop();
     void cleanup();
 
