@@ -23,6 +23,7 @@ private:
     void initVulkan();
     void createInstance();
     bool checkValidationLayerSupport();
+    void pickUpPhysicalDevice();
     void mainLoop();
     void cleanup();
 
@@ -33,6 +34,8 @@ private:
     GLFWwindow* window;
 
     VkInstance instance;
+
+    VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
 
 #ifdef NDEBUG
     const bool enableValidationLayers = false;
