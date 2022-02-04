@@ -24,6 +24,7 @@ private:
     void createInstance();
     bool checkValidationLayerSupport();
     void pickPhysicalDevice();
+    bool isPhysicalDeviceSuitable(const VkPhysicalDevice& physicalDevice);
     void mainLoop();
     void cleanup();
 

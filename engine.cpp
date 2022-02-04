@@ -92,6 +92,10 @@ void Engine::pickPhysicalDevice() {
     vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, physicalDevices.data());
 }
 
+bool Engine::isPhysicalDeviceSuitable(VkPhysicalDevice const &physicalDevice) {
+    return true;
+}
+
 void Engine::mainLoop() {
     while(!glfwWindowShouldClose(window))
         glfwPollEvents();
