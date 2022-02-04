@@ -46,6 +46,7 @@ private:
     VkInstance instance;
 
     VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
+    VkDevice logicalDevice;
 
 #ifdef NDEBUG
     const bool enableValidationLayers = false;
