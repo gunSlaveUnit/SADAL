@@ -24,6 +24,7 @@ void Engine::initWindow() {
 
 void Engine::initVulkan() {
     createInstance();
+    pickUpPhysicalDevice();
 }
 
 void Engine::createInstance() {
@@ -78,6 +79,17 @@ bool Engine::checkValidationLayerSupport() {
     }
 
     return true;
+}
+
+void Engine::pickUpPhysicalDevice() {
+    uint32_t physicalDeviceCount = 0;
+    vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, nullptr);
+
+    if(!physicalDeviceCount)
+        throw std::runtime_error("ERROR: Can't find a physical GPU device with Vulkan support");
+
+    std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
+    vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, physicalDevices.data());
 }
 
 void Engine::mainLoop() {
