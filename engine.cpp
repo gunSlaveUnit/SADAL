@@ -119,6 +119,9 @@ Engine::QueueFamilyIndices Engine::findQueueFamilies(VkPhysicalDevice const &phy
     for(const auto& queueFamily : queueFamilies) {
         if(queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
             indices.graphicsFamily = graphicsFamilyIndex;
+
+        if(indices.isQueueFamilyAvailable()) break;
+
         ++graphicsFamilyIndex;
     }
 
