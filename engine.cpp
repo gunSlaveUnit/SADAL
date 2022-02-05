@@ -26,6 +26,7 @@ void Engine::initVulkan() {
     createInstance();
     createSurface();
     pickPhysicalDevice();
+    createLogicalDevice();
 }
 
 void Engine::createInstance() {
