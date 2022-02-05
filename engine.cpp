@@ -173,6 +173,7 @@ void Engine::mainLoop() {
 
 void Engine::cleanup() {
     vkDestroyDevice(logicalDevice, nullptr);
+    vkDestroySurfaceKHR(instance, surface, nullptr);
     vkDestroyInstance(instance, nullptr);
     glfwDestroyWindow(window);
     glfwTerminate();
