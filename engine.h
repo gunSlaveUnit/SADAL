@@ -24,6 +24,14 @@ private:
     void initWindow();
     void initVulkan();
     void createInstance();
+    #ifdef NDEBUG
+        const bool enableValidationLayers = false;
+    #else
+        const bool enableValidationLayers = true;
+    #endif
+    const std::vector<const char*> validationLayers = {
+            "VK_LAYER_LUNARG_standard_validation"
+    };
     bool checkValidationLayerSupport();
     void createSurface();
     void pickPhysicalDevice();
@@ -53,15 +61,6 @@ private:
     VkQueue presentSurfaceQueue;
     VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
     VkDevice logicalDevice;
-
-#ifdef NDEBUG
-    const bool enableValidationLayers = false;
-#else
-    const bool enableValidationLayers = true;
-#endif
-    const std::vector<const char*> validationLayers = {
-            "VK_LAYER_LUNARG_standard_validation"
-    };
 };
 
 
