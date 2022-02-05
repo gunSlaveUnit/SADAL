@@ -144,14 +144,14 @@ void Engine::createLogicalDevice() {
     vkGetDeviceQueue(logicalDevice, indices.graphicsFamily.value(), 0, &graphicsQueue);
 }
 
-Engine::QueueFamilyIndices Engine::findQueueFamilies(VkPhysicalDevice const &physicalDevice) {
+Engine::QueueFamilyIndices Engine::findQueueFamilies(VkPhysicalDevice const &device) {
     QueueFamilyIndices indices;
 
     uint32_t queueFamilyCount = 0;
-    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, nullptr);
+    vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
 
     std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
-    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, queueFamilies.data());
+    vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
 
     int graphicsFamilyIndex = 0;
     for(const auto& queueFamily : queueFamilies) {
@@ -159,7 +159,7 @@ Engine::QueueFamilyIndices Engine::findQueueFamilies(VkPhysicalDevice const &phy
             indices.graphicsFamily = graphicsFamilyIndex;
 
         VkBool32 isDevicePresentImagesSurface = false;
-        vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, graphicsFamilyIndex, surface, &isDevicePresentImagesSurface);
+        vkGetPhysicalDeviceSurfaceSupportKHR(device, graphicsFamilyIndex, surface, &isDevicePresentImagesSurface);
 
         if(isDevicePresentImagesSurface) indices.presentSurfaceFamily = graphicsFamilyIndex;
 
