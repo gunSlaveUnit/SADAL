@@ -157,7 +157,8 @@ void Engine::createLogicalDevice() {
     deviceCreateInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
     deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
     deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
-    deviceCreateInfo.enabledExtensionCount = 0;
+    deviceCreateInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
+    deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
     if (enableValidationLayers) {
         deviceCreateInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
