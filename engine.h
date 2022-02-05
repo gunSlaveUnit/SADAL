@@ -76,6 +76,8 @@ private:
     };
     VkSwapchainKHR swapChain;
     std::vector<VkImage> swapChainImages;
+    VkFormat swapChainFormat;
+    VkExtent2D swapChainExtent;
 };
 
 

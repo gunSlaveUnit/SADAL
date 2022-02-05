@@ -260,6 +260,9 @@ void Engine::createSwapChain() {
     vkGetSwapchainImagesKHR(logicalDevice, swapChain, &swapChainImagesCount, nullptr);
     swapChainImages.resize(swapChainImagesCount);
     vkGetSwapchainImagesKHR(logicalDevice, swapChain, &swapChainImagesCount, swapChainImages.data());
+
+    swapChainFormat = surfaceFormat.format;
+    swapChainExtent = extent;
 }
 
 Engine::SwapChainSupportDetails Engine::queryDetailsSwapChainSupport(VkPhysicalDevice device) {
