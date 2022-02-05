@@ -241,5 +241,3 @@ void Engine::cleanup() {
     glfwDestroyWindow(window);
     glfwTerminate();
 }
-
-
