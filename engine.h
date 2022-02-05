@@ -50,6 +50,12 @@ private:
         std::optional<uint32_t> presentSurfaceFamily;
     };
     QueueFamilyIndices findQueueFamilies(const VkPhysicalDevice& physicalDevice);
+    struct SwapChainSupportDetails {
+        VkSurfaceCapabilitiesKHR capabilities;
+        std::vector<VkSurfaceFormatKHR> formats;
+        std::vector<VkPresentModeKHR> presentModes;
+    };
+    SwapChainSupportDetails queryDetailsSwapChainSupport(VkPhysicalDevice device);
     void mainLoop();
     void cleanup();
 

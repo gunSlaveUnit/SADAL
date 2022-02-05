@@ -200,6 +200,28 @@ Engine::QueueFamilyIndices Engine::findQueueFamilies(VkPhysicalDevice const &dev
     return indices;
 }
 
+Engine::SwapChainSupportDetails Engine::queryDetailsSwapChainSupport(VkPhysicalDevice device) {
+    SwapChainSupportDetails swapChainDetails;
+
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &swapChainDetails.capabilities);
+
+    uint32_t formatsCount;
+    vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatsCount, nullptr);
+    if(!formatsCount) {
+        swapChainDetails.formats.resize(formatsCount);
+        vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatsCount, swapChainDetails.formats.data());
+    }
+
+    uint32_t presentModsCount;
+    vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModsCount, nullptr);
+    if(!presentModsCount) {
+        swapChainDetails.presentModes.resize(presentModsCount);
+        vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModsCount, swapChainDetails.presentModes.data());
+    }
+
+    return swapChainDetails;
+}
+
 void Engine::mainLoop() {
     while(!glfwWindowShouldClose(window))
         glfwPollEvents();
@@ -212,3 +234,5 @@ void Engine::cleanup() {
     glfwDestroyWindow(window);
     glfwTerminate();
 }
+
+
