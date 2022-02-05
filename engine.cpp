@@ -24,6 +24,7 @@ void Engine::initWindow() {
 
 void Engine::initVulkan() {
     createInstance();
+    createSurface();
     pickPhysicalDevice();
 }
 
@@ -45,6 +46,9 @@ void Engine::createInstance() {
 
     uint32_t glfwExtensionCount = 0;
     const char** glfwExtensionsNames = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+
+    for(int i = 0; i < glfwExtensionCount; ++i)
+        std::cout<<glfwExtensionsNames[i]<<std::endl;
 
     createInfo.enabledExtensionCount = glfwExtensionCount;
     createInfo.ppEnabledExtensionNames = glfwExtensionsNames;
@@ -79,6 +83,11 @@ bool Engine::checkValidationLayerSupport() {
     }
 
     return true;
+}
+
+void Engine::createSurface() {
+    if(glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS)
+        throw std::runtime_error("ERROR: GLFW failed to create a surface");
 }
 
 void Engine::pickPhysicalDevice() {

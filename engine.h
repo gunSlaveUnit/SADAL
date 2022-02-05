@@ -24,6 +24,7 @@ private:
     void initVulkan();
     void createInstance();
     bool checkValidationLayerSupport();
+    void createSurface();
     void pickPhysicalDevice();
     bool isPhysicalDeviceSuitable(const VkPhysicalDevice& physicalDevice);
     void createLogicalDevice();
