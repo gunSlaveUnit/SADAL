@@ -45,6 +45,7 @@ private:
     GLFWwindow* window;
 
     VkInstance instance;
+    VkSurfaceKHR surface;
     VkQueue graphicsQueue;
     VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
     VkDevice logicalDevice;
