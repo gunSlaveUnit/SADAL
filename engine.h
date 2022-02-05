@@ -35,7 +35,11 @@ private:
     bool checkValidationLayerSupport();
     void createSurface();
     void pickPhysicalDevice();
-    bool isPhysicalDeviceSuitable(const VkPhysicalDevice& physicalDevice);
+    bool isPhysicalDeviceSuitable(const VkPhysicalDevice& device);
+    bool checkDeviceExtensionSupport(const VkPhysicalDevice& device);
+    const std::vector<const char*> deviceExtensions = {
+            VK_KHR_SWAPCHAIN_EXTENSION_NAME
+    };
     void createLogicalDevice();
     struct QueueFamilyIndices {
         [[nodiscard]] bool isQueueFamilyAvailable() const {
@@ -52,7 +56,6 @@ private:
     const uint16_t WINDOW_WIDTH = 800;
     const uint16_t WINDOW_HEIGHT = 600;
     const char* WINDOW_TITLE = "Shattered Souls";
-
     GLFWwindow* window;
 
     VkInstance instance;
