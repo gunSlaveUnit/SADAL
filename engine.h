@@ -30,10 +30,11 @@ private:
     void createLogicalDevice();
     struct QueueFamilyIndices {
         [[nodiscard]] bool isQueueFamilyAvailable() const {
-            return graphicsFamily.has_value();
+            return graphicsFamily.has_value() && presentSurfaceFamily.has_value();
         }
 
         std::optional<uint32_t> graphicsFamily;
+        std::optional<uint32_t> presentSurfaceFamily;
     };
     QueueFamilyIndices findQueueFamilies(const VkPhysicalDevice& physicalDevice);
     void mainLoop();
