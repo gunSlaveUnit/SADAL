@@ -158,6 +158,11 @@ Engine::QueueFamilyIndices Engine::findQueueFamilies(VkPhysicalDevice const &phy
         if(queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
             indices.graphicsFamily = graphicsFamilyIndex;
 
+        VkBool32 isDevicePresentImagesSurface = false;
+        vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, graphicsFamilyIndex, surface, &isDevicePresentImagesSurface);
+
+        if(isDevicePresentImagesSurface) indices.presentSurfaceFamily = graphicsFamilyIndex;
+
         if(indices.isQueueFamilyAvailable()) break;
 
         ++graphicsFamilyIndex;
