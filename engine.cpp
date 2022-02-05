@@ -101,8 +101,8 @@ void Engine::pickPhysicalDevice() {
         throw std::runtime_error("ERROR: Failed to find a suitable GPU");
 }
 
-bool Engine::isPhysicalDeviceSuitable(VkPhysicalDevice const &physicalDevice) {
-    QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
+bool Engine::isPhysicalDeviceSuitable(VkPhysicalDevice const &device) {
+    QueueFamilyIndices indices = findQueueFamilies(device);
     return indices.isQueueFamilyAvailable();
 }
 
