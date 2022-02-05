@@ -48,9 +48,6 @@ void Engine::createInstance() {
     uint32_t glfwExtensionCount = 0;
     const char** glfwExtensionsNames = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
-    for(int i = 0; i < glfwExtensionCount; ++i)
-        std::cout<<glfwExtensionsNames[i]<<std::endl;
-
     createInfo.enabledExtensionCount = glfwExtensionCount;
     createInfo.ppEnabledExtensionNames = glfwExtensionsNames;
 
