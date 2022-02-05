@@ -110,8 +110,15 @@ void Engine::pickPhysicalDevice() {
 
 bool Engine::isPhysicalDeviceSuitable(VkPhysicalDevice const &device) {
     QueueFamilyIndices indices = findQueueFamilies(device);
-    return indices.isQueueFamilyAvailable() &&
-            checkDeviceExtensionSupport(device);
+
+    bool areExtensionsSupported = checkDeviceExtensionSupport(device);
+    bool isSwapChainAdequate = false;
+    if (areExtensionsSupported) {
+        SwapChainSupportDetails swapChainSupportDetails = queryDetailsSwapChainSupport(device);
+        isSwapChainAdequate = !swapChainSupportDetails.formats.empty() && !swapChainSupportDetails.presentModes.empty();
+    }
+
+    return indices.isQueueFamilyAvailable() && areExtensionsSupported && isSwapChainAdequate;
 }
 
 bool Engine::checkDeviceExtensionSupport(VkPhysicalDevice const &device) {
@@ -207,14 +214,14 @@ Engine::SwapChainSupportDetails Engine::queryDetailsSwapChainSupport(VkPhysicalD
 
     uint32_t formatsCount;
     vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatsCount, nullptr);
-    if(!formatsCount) {
+    if(formatsCount) {
         swapChainDetails.formats.resize(formatsCount);
         vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatsCount, swapChainDetails.formats.data());
     }
 
     uint32_t presentModsCount;
     vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModsCount, nullptr);
-    if(!presentModsCount) {
+    if(presentModsCount) {
         swapChainDetails.presentModes.resize(presentModsCount);
         vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModsCount, swapChainDetails.presentModes.data());
     }
