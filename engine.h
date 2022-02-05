@@ -24,22 +24,11 @@ private:
     void initWindow();
     void initVulkan();
     void createInstance();
-    #ifdef NDEBUG
-        const bool enableValidationLayers = false;
-    #else
-        const bool enableValidationLayers = true;
-    #endif
-    const std::vector<const char*> validationLayers = {
-            "VK_LAYER_LUNARG_standard_validation"
-    };
     bool checkValidationLayerSupport();
     void createSurface();
     void pickPhysicalDevice();
     bool isPhysicalDeviceSuitable(const VkPhysicalDevice& device);
     bool checkDeviceExtensionSupport(const VkPhysicalDevice& device);
-    const std::vector<const char*> deviceExtensions = {
-            VK_KHR_SWAPCHAIN_EXTENSION_NAME
-    };
     void createLogicalDevice();
     struct QueueFamilyIndices {
         [[nodiscard]] bool isQueueFamilyAvailable() const {
@@ -69,12 +58,24 @@ private:
     GLFWwindow* window;
 
     VkInstance instance;
+    #ifdef NDEBUG
+        const bool enableValidationLayers = false;
+    #else
+        const bool enableValidationLayers = true;
+    #endif
+    const std::vector<const char*> validationLayers = {
+            "VK_LAYER_LUNARG_standard_validation"
+    };
     VkSurfaceKHR surface;
     VkQueue graphicsQueue;
     VkQueue presentSurfaceQueue;
     VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
     VkDevice logicalDevice;
+    const std::vector<const char*> deviceExtensions = {
+            VK_KHR_SWAPCHAIN_EXTENSION_NAME
+    };
     VkSwapchainKHR swapChain;
+    std::vector<VkImage> swapChainImages;
 };
 
 

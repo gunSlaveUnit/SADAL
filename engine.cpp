@@ -255,6 +255,11 @@ void Engine::createSwapChain() {
 
     if(vkCreateSwapchainKHR(logicalDevice, &createSwapChainInfo, nullptr, &swapChain) != VK_SUCCESS)
         throw std::runtime_error("ERROR: Vulkan failed to create swap chain");
+
+    uint32_t swapChainImagesCount = 0;
+    vkGetSwapchainImagesKHR(logicalDevice, swapChain, &swapChainImagesCount, nullptr);
+    swapChainImages.resize(swapChainImagesCount);
+    vkGetSwapchainImagesKHR(logicalDevice, swapChain, &swapChainImagesCount, swapChainImages.data());
 }
 
 Engine::SwapChainSupportDetails Engine::queryDetailsSwapChainSupport(VkPhysicalDevice device) {
