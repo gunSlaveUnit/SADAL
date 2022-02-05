@@ -56,6 +56,7 @@ private:
         std::vector<VkPresentModeKHR> presentModes;
     };
     SwapChainSupportDetails queryDetailsSwapChainSupport(VkPhysicalDevice device);
+    VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
     void mainLoop();
     void cleanup();
 
