@@ -50,6 +50,7 @@ private:
         std::optional<uint32_t> presentSurfaceFamily;
     };
     QueueFamilyIndices findQueueFamilies(const VkPhysicalDevice& physicalDevice);
+    void createSwapChain();
     struct SwapChainSupportDetails {
         VkSurfaceCapabilitiesKHR capabilities;
         std::vector<VkSurfaceFormatKHR> formats;
@@ -73,6 +74,7 @@ private:
     VkQueue presentSurfaceQueue;
     VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
     VkDevice logicalDevice;
+    VkSwapchainKHR swapChain;
 };
 
 

@@ -27,6 +27,7 @@ void Engine::initVulkan() {
     createSurface();
     pickPhysicalDevice();
     createLogicalDevice();
+    createSwapChain();
 }
 
 void Engine::createInstance() {
@@ -207,6 +208,55 @@ Engine::QueueFamilyIndices Engine::findQueueFamilies(VkPhysicalDevice const &dev
     return indices;
 }
 
+void Engine::createSwapChain() {
+    SwapChainSupportDetails swapChainSupportDetails = queryDetailsSwapChainSupport(physicalDevice);
+
+    VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupportDetails.formats);
+    VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupportDetails.presentModes);
+    VkExtent2D extent = chooseSwapExtent(swapChainSupportDetails.capabilities);
+
+    /* +1, since at the bare minimum, we might have to wait for the driver
+     * to complete internal operations before we can get another image to render. */
+    const uint32_t additionalImagesNumber = 1;
+    uint32_t imageCount = swapChainSupportDetails.capabilities.minImageCount + additionalImagesNumber;
+
+    const uint32_t maxImageCountCapabilities = swapChainSupportDetails.capabilities.maxImageCount;
+    if(maxImageCountCapabilities > 0 && imageCount > maxImageCountCapabilities)
+        imageCount = maxImageCountCapabilities;
+
+    VkSwapchainCreateInfoKHR createSwapChainInfo{};
+    createSwapChainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+    createSwapChainInfo.surface = surface;
+    createSwapChainInfo.minImageCount = imageCount;
+    createSwapChainInfo.imageFormat = surfaceFormat.format;
+    createSwapChainInfo.imageColorSpace = surfaceFormat.colorSpace;
+    createSwapChainInfo.imageExtent = extent;
+    createSwapChainInfo.imageArrayLayers = 1;
+    createSwapChainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+
+    QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
+    uint32_t queueFamilyIndices[] = {indices.graphicsFamily.value(), indices.presentSurfaceFamily.value()};
+
+    if (indices.graphicsFamily != indices.presentSurfaceFamily) {
+        createSwapChainInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+        createSwapChainInfo.queueFamilyIndexCount = 2;
+        createSwapChainInfo.pQueueFamilyIndices = queueFamilyIndices;
+    } else {
+        createSwapChainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+        createSwapChainInfo.queueFamilyIndexCount = 0; // Optional
+        createSwapChainInfo.pQueueFamilyIndices = nullptr; // Optional
+    }
+
+    createSwapChainInfo.preTransform = swapChainSupportDetails.capabilities.currentTransform;
+    createSwapChainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+    createSwapChainInfo.presentMode = presentMode;
+    createSwapChainInfo.clipped = VK_TRUE;
+    createSwapChainInfo.oldSwapchain = VK_NULL_HANDLE;
+
+    if(vkCreateSwapchainKHR(logicalDevice, &createSwapChainInfo, nullptr, &swapChain) != VK_SUCCESS)
+        throw std::runtime_error("ERROR: Vulkan failed to create swap chain");
+}
+
 Engine::SwapChainSupportDetails Engine::queryDetailsSwapChainSupport(VkPhysicalDevice device) {
     SwapChainSupportDetails swapChainDetails;
 
@@ -266,6 +316,7 @@ void Engine::mainLoop() {
 }
 
 void Engine::cleanup() {
+    vkDestroySwapchainKHR(logicalDevice, swapChain, nullptr);
     vkDestroyDevice(logicalDevice, nullptr);
     vkDestroySurfaceKHR(instance, surface, nullptr);
     vkDestroyInstance(instance, nullptr);
