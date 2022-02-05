@@ -12,6 +12,7 @@
 #include <vector>
 #include <cstring>
 #include <optional>
+#include <set>
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
@@ -49,6 +50,7 @@ private:
     VkInstance instance;
     VkSurfaceKHR surface;
     VkQueue graphicsQueue;
+    VkQueue presentSurfaceQueue;
     VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
     VkDevice logicalDevice;
 
