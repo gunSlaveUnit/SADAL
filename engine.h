@@ -50,6 +50,7 @@ private:
     VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
     VkExtent2D chooseSwapExtent(VkSurfaceCapabilitiesKHR& capabilities);
     void createImageViews();
+    void createGraphicsPipeline();
     void mainLoop();
     void cleanup();
 

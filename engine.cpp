@@ -29,6 +29,7 @@ void Engine::initVulkan() {
     createLogicalDevice();
     createSwapChain();
     createImageViews();
+    createGraphicsPipeline();
 }
 
 void Engine::createInstance() {
@@ -342,6 +343,10 @@ void Engine::createImageViews() {
         if (vkCreateImageView(logicalDevice, &imageViewCreateInfo, nullptr, &swapChainImageViews[i]) != VK_SUCCESS)
             throw std::runtime_error("ERROR: Vulkan failed to create image views");
     }
+}
+
+void Engine::createGraphicsPipeline() {
+
 }
 
 void Engine::mainLoop() {
