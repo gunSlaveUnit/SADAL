@@ -348,6 +348,26 @@ void Engine::createImageViews() {
 void Engine::createGraphicsPipeline() {
     const auto vertexShaderCode = readFile(SHADER_COMPILED_DIRECTORY + "vertex.spv");
     const auto fragmentShaderCode = readFile(SHADER_COMPILED_DIRECTORY + "fragment.spv");
+
+    VkShaderModule vertexModule = createShaderModule(vertexShaderCode);
+    VkShaderModule fragmentModule = createShaderModule(fragmentShaderCode);
+
+    VkPipelineShaderStageCreateInfo vertexShaderStageCreateInfo{};
+    vertexShaderStageCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    vertexShaderStageCreateInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
+    vertexShaderStageCreateInfo.module = vertexModule;
+    vertexShaderStageCreateInfo.pName = "main";
+
+    VkPipelineShaderStageCreateInfo fragmentShaderStageCreateInfo{};
+    fragmentShaderStageCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    fragmentShaderStageCreateInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+    fragmentShaderStageCreateInfo.module = fragmentModule;
+    fragmentShaderStageCreateInfo.pName = "main";
+
+    VkPipelineShaderStageCreateInfo shaderStages[] = {vertexShaderStageCreateInfo, fragmentShaderStageCreateInfo};
+
+    vkDestroyShaderModule(logicalDevice, vertexModule, nullptr);
+    vkDestroyShaderModule(logicalDevice, fragmentModule, nullptr);
 }
 
 std::vector<char> Engine::readFile(const std::string &filename) {
