@@ -346,7 +346,26 @@ void Engine::createImageViews() {
 }
 
 void Engine::createGraphicsPipeline() {
+    const auto vertexShaderCode = readFile(SHADER_COMPILED_DIRECTORY + "vertex.spv");
+    const auto fragmentShaderCode = readFile(SHADER_COMPILED_DIRECTORY + "fragment.spv");
+}
 
+std::vector<char> Engine::readFile(const std::string &filename) {
+    std::ifstream file(filename, std::ios::ate | std::ios::binary);
+
+    if(!file.is_open())
+        throw std::runtime_error("ERROR: Failed to open file: " + filename);
+
+    long fileSize = static_cast<long>(file.tellg());
+    std::cout<<fileSize<<std::endl;
+    std::vector<char> buffer(fileSize);
+
+    file.seekg(0);
+    file.read(buffer.data(), fileSize);
+
+    file.close();
+
+    return buffer;
 }
 
 void Engine::mainLoop() {

@@ -13,6 +13,7 @@
 #include <cstring>
 #include <optional>
 #include <set>
+#include <fstream>
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
@@ -51,6 +52,7 @@ private:
     VkExtent2D chooseSwapExtent(VkSurfaceCapabilitiesKHR& capabilities);
     void createImageViews();
     void createGraphicsPipeline();
+    static std::vector<char> readFile(const std::string& filename);
     void mainLoop();
     void cleanup();
 
@@ -81,6 +83,8 @@ private:
     VkFormat swapChainFormat;
     VkExtent2D swapChainExtent;
     std::vector<VkImageView> swapChainImageViews;
+
+    const std::string SHADER_COMPILED_DIRECTORY = R"(../shaders/cmpld/)";
 };
 
 
