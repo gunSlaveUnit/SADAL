@@ -357,7 +357,6 @@ std::vector<char> Engine::readFile(const std::string &filename) {
         throw std::runtime_error("ERROR: Failed to open file: " + filename);
 
     long fileSize = static_cast<long>(file.tellg());
-    std::cout<<fileSize<<std::endl;
     std::vector<char> buffer(fileSize);
 
     file.seekg(0);
@@ -366,6 +365,19 @@ std::vector<char> Engine::readFile(const std::string &filename) {
     file.close();
 
     return buffer;
+}
+
+VkShaderModule Engine::createShaderModule(const std::vector<char>& code) {
+    VkShaderModuleCreateInfo createInfo{};
+    createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+    createInfo.codeSize = code.size();
+    createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
+
+    VkShaderModule shaderModule;
+    if(vkCreateShaderModule(logicalDevice, &createInfo, nullptr, &shaderModule) != VK_SUCCESS)
+        throw std::runtime_error("ERROR: Vulkan failed to create shader module");
+
+    return shaderModule;
 }
 
 void Engine::mainLoop() {
