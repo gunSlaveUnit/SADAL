@@ -54,6 +54,8 @@ private:
     void createGraphicsPipeline();
     static std::vector<char> readFile(const std::string& filename);
     VkShaderModule createShaderModule(const std::vector<char>& code);
+    VkViewport createViewport();
+    VkRect2D createScissor();
     void mainLoop();
     void cleanup();
 
