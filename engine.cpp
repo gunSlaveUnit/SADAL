@@ -31,6 +31,7 @@ void Engine::initVulkan() {
     createImageViews();
     createRenderPass();
     createGraphicsPipeline();
+    createFrameBuffers();
 }
 
 void Engine::createInstance() {
