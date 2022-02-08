@@ -389,6 +389,19 @@ void Engine::createGraphicsPipeline() {
     viewportState.scissorCount = 1;
     viewportState.pScissors = &scissor;
 
+    VkPipelineRasterizationStateCreateInfo rasterizerCreateInfo{};
+    rasterizerCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+    rasterizerCreateInfo.depthClampEnable = VK_FALSE;
+    rasterizerCreateInfo.rasterizerDiscardEnable = VK_FALSE;
+    rasterizerCreateInfo.polygonMode = VK_POLYGON_MODE_FILL;
+    rasterizerCreateInfo.lineWidth = 1.0f;
+    rasterizerCreateInfo.cullMode = VK_CULL_MODE_BACK_BIT;
+    rasterizerCreateInfo.frontFace = VK_FRONT_FACE_CLOCKWISE;
+    rasterizerCreateInfo.depthBiasEnable = VK_FALSE;
+    rasterizerCreateInfo.depthBiasConstantFactor = 0.0f;
+    rasterizerCreateInfo.depthBiasClamp = 0.0f;
+    rasterizerCreateInfo.depthBiasSlopeFactor = 0.0f;
+
     vkDestroyShaderModule(logicalDevice, vertexModule, nullptr);
     vkDestroyShaderModule(logicalDevice, fragmentModule, nullptr);
 }
@@ -439,6 +452,8 @@ VkRect2D Engine::createScissor() {
     VkRect2D scissor;
     scissor.offset = {0, 0};
     scissor.extent = swapChainExtent;
+
+    return scissor;
 }
 
 void Engine::mainLoop() {
