@@ -50,6 +50,7 @@ private:
     VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
     VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
     VkExtent2D chooseSwapExtent(VkSurfaceCapabilitiesKHR& capabilities);
+    void createRenderPass();
     void createImageViews();
     void createGraphicsPipeline();
     static std::vector<char> readFile(const std::string& filename);
@@ -86,6 +87,7 @@ private:
     VkFormat swapChainFormat;
     VkExtent2D swapChainExtent;
     std::vector<VkImageView> swapChainImageViews;
+    VkRenderPass renderPass;
     VkPipelineLayout pipelineLayout;
 
     const std::string SHADER_COMPILED_DIRECTORY = R"(../shaders/cmpld/)";
