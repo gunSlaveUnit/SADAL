@@ -553,12 +553,35 @@ VkRect2D Engine::createScissor() {
     return scissor;
 }
 
+void Engine::createFrameBuffers() {
+    size_t imagesCount = swapChainImageViews.size();
+    swapChainFrameBuffers.resize(swapChainImageViews.size());
+
+    for(size_t i = 0; i < imagesCount; ++i) {
+        VkImageView attachments[] = {swapChainImageViews[i] };
+
+        VkFramebufferCreateInfo framebufferInfo{};
+        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        framebufferInfo.renderPass = renderPass;
+        framebufferInfo.attachmentCount = sizeof(attachments) / sizeof(attachments[0]);
+        framebufferInfo.pAttachments = attachments;
+        framebufferInfo.width = swapChainExtent.width;
+        framebufferInfo.height = swapChainExtent.height;
+        framebufferInfo.layers = 1;
+
+        if(vkCreateFramebuffer(logicalDevice, &framebufferInfo, nullptr, &swapChainFrameBuffers[i]) != VK_SUCCESS)
+            throw std::runtime_error("ERROR: Vulkan failed to create frame buffer");
+    }
+}
+
 void Engine::mainLoop() {
     while(!glfwWindowShouldClose(window))
         glfwPollEvents();
 }
 
 void Engine::cleanup() {
+    for (auto framebuffer : swapChainFrameBuffers)
+        vkDestroyFramebuffer(logicalDevice, framebuffer, nullptr);
     vkDestroyPipeline(logicalDevice, graphicsPipeline, nullptr);
     vkDestroyPipelineLayout(logicalDevice, pipelineLayout, nullptr);
     vkDestroyRenderPass(logicalDevice, renderPass, nullptr);

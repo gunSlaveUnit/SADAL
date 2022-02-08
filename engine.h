@@ -57,6 +57,7 @@ private:
     VkShaderModule createShaderModule(const std::vector<char>& code);
     VkViewport createViewport();
     VkRect2D createScissor();
+    void createFrameBuffers();
     void mainLoop();
     void cleanup();
 
@@ -90,6 +91,7 @@ private:
     VkRenderPass renderPass;
     VkPipelineLayout pipelineLayout;
     VkPipeline graphicsPipeline;
+    std::vector<VkFramebuffer> swapChainFrameBuffers;
 
     const std::string SHADER_COMPILED_DIRECTORY = R"(../shaders/cmpld/)";
 };
