@@ -89,6 +89,7 @@ private:
     std::vector<VkImageView> swapChainImageViews;
     VkRenderPass renderPass;
     VkPipelineLayout pipelineLayout;
+    VkPipeline graphicsPipeline;
 
     const std::string SHADER_COMPILED_DIRECTORY = R"(../shaders/cmpld/)";
 };

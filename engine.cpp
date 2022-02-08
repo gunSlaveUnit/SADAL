@@ -478,6 +478,27 @@ void Engine::createGraphicsPipeline() {
     if (vkCreatePipelineLayout(logicalDevice, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
         throw std::runtime_error("ERROR: Vulkan failed to create pipeline layout");
 
+    VkGraphicsPipelineCreateInfo graphicsPipelineCreateInfo{};
+    graphicsPipelineCreateInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    graphicsPipelineCreateInfo.stageCount = 2;
+    graphicsPipelineCreateInfo.pStages = shaderStages;
+    graphicsPipelineCreateInfo.pVertexInputState = &vertexInputInfo;
+    graphicsPipelineCreateInfo.pInputAssemblyState = &inputAssemblyInfo;
+    graphicsPipelineCreateInfo.pViewportState = &viewportState;
+    graphicsPipelineCreateInfo.pRasterizationState = &rasterizerCreateInfo;
+    graphicsPipelineCreateInfo.pMultisampleState = &multisampling;
+    graphicsPipelineCreateInfo.pDepthStencilState = nullptr;
+    graphicsPipelineCreateInfo.pColorBlendState = &colorBlending;
+    graphicsPipelineCreateInfo.pDynamicState = nullptr;
+    graphicsPipelineCreateInfo.layout = pipelineLayout;
+    graphicsPipelineCreateInfo.renderPass = renderPass;
+    graphicsPipelineCreateInfo.subpass = 0;
+    graphicsPipelineCreateInfo.basePipelineHandle = VK_NULL_HANDLE;
+    graphicsPipelineCreateInfo.basePipelineIndex = -1;
+
+    if (vkCreateGraphicsPipelines(logicalDevice, VK_NULL_HANDLE, 1, &graphicsPipelineCreateInfo, nullptr, &graphicsPipeline) != VK_SUCCESS)
+        throw std::runtime_error("ERROR: Vulkan failed to create graphics pipeline");
+
     vkDestroyShaderModule(logicalDevice, vertexModule, nullptr);
     vkDestroyShaderModule(logicalDevice, fragmentModule, nullptr);
 }
@@ -538,6 +559,7 @@ void Engine::mainLoop() {
 }
 
 void Engine::cleanup() {
+    vkDestroyPipeline(logicalDevice, graphicsPipeline, nullptr);
     vkDestroyPipelineLayout(logicalDevice, pipelineLayout, nullptr);
     vkDestroyRenderPass(logicalDevice, renderPass, nullptr);
     for (const auto& imageView : swapChainImageViews)
