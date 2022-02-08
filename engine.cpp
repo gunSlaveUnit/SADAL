@@ -436,6 +436,16 @@ void Engine::createGraphicsPipeline() {
     colorBlending.blendConstants[2] = 0.0f;
     colorBlending.blendConstants[3] = 0.0f;
 
+    VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
+    pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+    pipelineLayoutInfo.setLayoutCount = 0;
+    pipelineLayoutInfo.pSetLayouts = nullptr;
+    pipelineLayoutInfo.pushConstantRangeCount = 0;
+    pipelineLayoutInfo.pPushConstantRanges = nullptr;
+
+    if (vkCreatePipelineLayout(logicalDevice, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
+        throw std::runtime_error("ERROR: Vulkan failed to create pipeline layout");
+
     vkDestroyShaderModule(logicalDevice, vertexModule, nullptr);
     vkDestroyShaderModule(logicalDevice, fragmentModule, nullptr);
 }
@@ -496,9 +506,9 @@ void Engine::mainLoop() {
 }
 
 void Engine::cleanup() {
-    for (const auto& imageView : swapChainImageViews) {
+    vkDestroyPipelineLayout(logicalDevice, pipelineLayout, nullptr);
+    for (const auto& imageView : swapChainImageViews)
         vkDestroyImageView(logicalDevice, imageView, nullptr);
-    }
     vkDestroySwapchainKHR(logicalDevice, swapChain, nullptr);
     vkDestroyDevice(logicalDevice, nullptr);
     vkDestroySurfaceKHR(instance, surface, nullptr);
