@@ -34,6 +34,7 @@ void Engine::initVulkan() {
     createFrameBuffers();
     createCommandPool();
     createCommandBuffers();
+    createSemaphores();
 }
 
 void Engine::createInstance() {
@@ -629,12 +630,23 @@ void Engine::createCommandBuffers() {
     }
 }
 
+void Engine::createSemaphores() {
+    VkSemaphoreCreateInfo semaphoreInfo{};
+    semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+    if (vkCreateSemaphore(logicalDevice, &semaphoreInfo, nullptr, &imageAvailableSemaphore) != VK_SUCCESS ||
+        vkCreateSemaphore(logicalDevice, &semaphoreInfo, nullptr, &renderFinishedSemaphore) != VK_SUCCESS)
+        throw std::runtime_error("ERROR: Vulkan failed to create semaphores!");
+}
+
 void Engine::mainLoop() {
     while(!glfwWindowShouldClose(window))
         glfwPollEvents();
 }
 
 void Engine::cleanup() {
+    vkDestroySemaphore(logicalDevice, renderFinishedSemaphore, nullptr);
+    vkDestroySemaphore(logicalDevice, imageAvailableSemaphore, nullptr);
     vkDestroyCommandPool(logicalDevice, commandPool, nullptr);
     for (auto framebuffer : swapChainFrameBuffers)
         vkDestroyFramebuffer(logicalDevice, framebuffer, nullptr);

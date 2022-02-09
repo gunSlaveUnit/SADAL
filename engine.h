@@ -60,6 +60,7 @@ private:
     void createFrameBuffers();
     void createCommandPool();
     void createCommandBuffers();
+    void createSemaphores();
     void mainLoop();
     void cleanup();
 
@@ -96,6 +97,8 @@ private:
     std::vector<VkFramebuffer> swapChainFrameBuffers;
     VkCommandPool commandPool;
     std::vector<VkCommandBuffer> commandBuffers;
+    VkSemaphore imageAvailableSemaphore;
+    VkSemaphore renderFinishedSemaphore;
 
     const std::string SHADER_COMPILED_DIRECTORY = R"(../shaders/cmpld/)";
 };
