@@ -62,6 +62,7 @@ private:
     void createCommandBuffers();
     void createSemaphores();
     void mainLoop();
+    void drawFrame();
     void cleanup();
 
     const uint16_t WINDOW_WIDTH = 800;
