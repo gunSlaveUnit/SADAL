@@ -32,6 +32,7 @@ void Engine::initVulkan() {
     createRenderPass();
     createGraphicsPipeline();
     createFrameBuffers();
+    createCommandPool();
 }
 
 void Engine::createInstance() {
@@ -575,12 +576,25 @@ void Engine::createFrameBuffers() {
     }
 }
 
+void Engine::createCommandPool() {
+    QueueFamilyIndices queueFamilyIndices = findQueueFamilies(physicalDevice);
+
+    VkCommandPoolCreateInfo commandPoolInfo{};
+    commandPoolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    commandPoolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
+    commandPoolInfo.flags = 0;
+
+    if (vkCreateCommandPool(logicalDevice, &commandPoolInfo, nullptr, &commandPool) != VK_SUCCESS)
+        throw std::runtime_error("ERROR: Vulkan failed to create command pool");
+}
+
 void Engine::mainLoop() {
     while(!glfwWindowShouldClose(window))
         glfwPollEvents();
 }
 
 void Engine::cleanup() {
+    vkDestroyCommandPool(logicalDevice, commandPool, nullptr);
     for (auto framebuffer : swapChainFrameBuffers)
         vkDestroyFramebuffer(logicalDevice, framebuffer, nullptr);
     vkDestroyPipeline(logicalDevice, graphicsPipeline, nullptr);
