@@ -59,6 +59,7 @@ private:
     VkRect2D createScissor();
     void createFrameBuffers();
     void createCommandPool();
+    void createCommandBuffers();
     void mainLoop();
     void cleanup();
 
@@ -94,6 +95,7 @@ private:
     VkPipeline graphicsPipeline;
     std::vector<VkFramebuffer> swapChainFrameBuffers;
     VkCommandPool commandPool;
+    std::vector<VkCommandBuffer> commandBuffers;
 
     const std::string SHADER_COMPILED_DIRECTORY = R"(../shaders/cmpld/)";
 };
