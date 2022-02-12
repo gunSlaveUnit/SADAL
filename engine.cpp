@@ -683,7 +683,13 @@ void Engine::drawFrame() {
     vkWaitForFences(logicalDevice, 1, &flightFences[currentFrame], VK_TRUE, UINT64_MAX);
 
     uint32_t imageIndex;
-    vkAcquireNextImageKHR(logicalDevice, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+    VkResult result = vkAcquireNextImageKHR(logicalDevice, swapChain, UINT64_MAX,
+                                            imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+    if (result == VK_ERROR_OUT_OF_DATE_KHR) {
+        recreateSwapChain();
+        return;
+    } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
+        throw std::runtime_error("ERROR: Vulkan failed to acquire swap chain image");
 
     if (flightImages[imageIndex] != VK_NULL_HANDLE)
         vkWaitForFences(logicalDevice, 1, &flightImages[imageIndex], VK_TRUE, UINT64_MAX);
@@ -721,9 +727,26 @@ void Engine::drawFrame() {
     presentInfo.pImageIndices = &imageIndex;
     presentInfo.pResults = nullptr;
 
-    vkQueuePresentKHR(presentSurfaceQueue, &presentInfo);
+    result = vkQueuePresentKHR(presentSurfaceQueue, &presentInfo);
+    if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
+        recreateSwapChain();
+    else if (result != VK_SUCCESS)
+        throw std::runtime_error("ERROR: Vulkan failed to present swap chain image");
 
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+}
+
+void Engine::recreateSwapChain() {
+    vkDeviceWaitIdle(logicalDevice);
+
+    cleanupSwapChain();
+
+    createSwapChain();
+    createImageViews();
+    createRenderPass();
+    createGraphicsPipeline();
+    createFrameBuffers();
+    createCommandBuffers();
 }
 
 void Engine::cleanup() {

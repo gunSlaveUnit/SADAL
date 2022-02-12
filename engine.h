@@ -64,6 +64,7 @@ private:
     void createFences();
     void mainLoop();
     void drawFrame();
+    void recreateSwapChain();
     void cleanup();
     void cleanupSwapChain();
 
