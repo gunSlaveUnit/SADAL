@@ -35,6 +35,7 @@ void Engine::initVulkan() {
     createCommandPool();
     createCommandBuffers();
     createSemaphores();
+    createFences();
 }
 
 void Engine::createInstance() {
@@ -656,6 +657,17 @@ void Engine::createSemaphores() {
     }
 }
 
+void Engine::createFences() {
+    flightFences.resize(MAX_FRAMES_IN_FLIGHT);
+
+    VkFenceCreateInfo fenceCreateInfo{};
+    fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+
+    for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+        if(vkCreateFence(logicalDevice, &fenceCreateInfo, nullptr, &flightFences[i]) != VK_SUCCESS)
+            throw std::runtime_error("ERROR: Vulkan failed to create a fence for a frame");
+}
+
 void Engine::mainLoop() {
     while(!glfwWindowShouldClose(window)) {
         glfwPollEvents();
@@ -708,6 +720,7 @@ void Engine::cleanup() {
     for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
         vkDestroySemaphore(logicalDevice, renderFinishedSemaphores[i], nullptr);
         vkDestroySemaphore(logicalDevice, imageAvailableSemaphores[i], nullptr);
+        vkDestroyFence(logicalDevice, flightFences[i], nullptr);
     }
     vkDestroyCommandPool(logicalDevice, commandPool, nullptr);
     for (auto framebuffer : swapChainFrameBuffers)
