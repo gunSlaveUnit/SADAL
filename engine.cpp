@@ -727,23 +727,29 @@ void Engine::drawFrame() {
 }
 
 void Engine::cleanup() {
+    cleanupSwapChain();
+
     for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
         vkDestroySemaphore(logicalDevice, renderFinishedSemaphores[i], nullptr);
         vkDestroySemaphore(logicalDevice, imageAvailableSemaphores[i], nullptr);
         vkDestroyFence(logicalDevice, flightFences[i], nullptr);
     }
     vkDestroyCommandPool(logicalDevice, commandPool, nullptr);
+    vkDestroyDevice(logicalDevice, nullptr);
+    vkDestroySurfaceKHR(instance, surface, nullptr);
+    vkDestroyInstance(instance, nullptr);
+    glfwDestroyWindow(window);
+    glfwTerminate();
+}
+
+void Engine::cleanupSwapChain() {
     for (auto framebuffer : swapChainFrameBuffers)
         vkDestroyFramebuffer(logicalDevice, framebuffer, nullptr);
+    vkFreeCommandBuffers(logicalDevice, commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
     vkDestroyPipeline(logicalDevice, graphicsPipeline, nullptr);
     vkDestroyPipelineLayout(logicalDevice, pipelineLayout, nullptr);
     vkDestroyRenderPass(logicalDevice, renderPass, nullptr);
     for (const auto& imageView : swapChainImageViews)
         vkDestroyImageView(logicalDevice, imageView, nullptr);
     vkDestroySwapchainKHR(logicalDevice, swapChain, nullptr);
-    vkDestroyDevice(logicalDevice, nullptr);
-    vkDestroySurfaceKHR(instance, surface, nullptr);
-    vkDestroyInstance(instance, nullptr);
-    glfwDestroyWindow(window);
-    glfwTerminate();
 }

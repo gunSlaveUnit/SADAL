@@ -65,6 +65,7 @@ private:
     void mainLoop();
     void drawFrame();
     void cleanup();
+    void cleanupSwapChain();
 
     const uint16_t WINDOW_WIDTH = 800;
     const uint16_t WINDOW_HEIGHT = 600;
