@@ -100,7 +100,7 @@ private:
     std::vector<VkCommandBuffer> commandBuffers;
     std::vector<VkSemaphore> imageAvailableSemaphores;
     std::vector<VkSemaphore> renderFinishedSemaphores;
-    const uint32_t MAX_FRAMES_IN_FLIGHT = 2;
+    const size_t MAX_FRAMES_IN_FLIGHT = 2;
 
     const std::string SHADER_COMPILED_DIRECTORY = R"(../shaders/cmpld/)";
 };
