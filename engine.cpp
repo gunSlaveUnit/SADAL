@@ -662,6 +662,7 @@ void Engine::createFences() {
 
     VkFenceCreateInfo fenceCreateInfo{};
     fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+    fenceCreateInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
     for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
         if(vkCreateFence(logicalDevice, &fenceCreateInfo, nullptr, &flightFences[i]) != VK_SUCCESS)
@@ -678,6 +679,9 @@ void Engine::mainLoop() {
 }
 
 void Engine::drawFrame() {
+    vkWaitForFences(logicalDevice, 1, &flightFences[currentFrame], VK_TRUE, UINT64_MAX);
+    vkResetFences(logicalDevice, 1, &flightFences[currentFrame]);
+
     uint32_t imageIndex;
     vkAcquireNextImageKHR(logicalDevice, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
 
@@ -697,7 +701,7 @@ void Engine::drawFrame() {
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = signalSemaphores;
 
-    if (vkQueueSubmit(graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS)
+    if (vkQueueSubmit(graphicsQueue, 1, &submitInfo, flightFences[currentFrame]) != VK_SUCCESS)
         throw std::runtime_error("ERROR: Vulkan failed to submit draw command buffer!");
 
     VkPresentInfoKHR presentInfo{};
