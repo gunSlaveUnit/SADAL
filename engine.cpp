@@ -15,11 +15,16 @@ void Engine::initWindow() {
     glfwInit();
 
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
     window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, nullptr, nullptr);
     if (!window)
         throw std::runtime_error("ERROR: GLFW can't create window");
+    glfwSetWindowUserPointer(window, this);
+    glfwSetFramebufferSizeCallback(window,
+[](GLFWwindow* w, int width, int height){
+            auto app = reinterpret_cast<Engine*>(glfwGetWindowUserPointer(w));
+            app->isFramebufferResized = true;
+        });
 }
 
 void Engine::initVulkan() {
