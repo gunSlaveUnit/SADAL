@@ -102,6 +102,7 @@ private:
     std::vector<VkSemaphore> imageAvailableSemaphores;
     std::vector<VkSemaphore> renderFinishedSemaphores;
     std::vector<VkFence> flightFences;
+    std::vector<VkFence> flightImages;
     const size_t MAX_FRAMES_IN_FLIGHT = 2;
     size_t currentFrame = 0;
 

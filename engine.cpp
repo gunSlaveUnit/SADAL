@@ -658,6 +658,7 @@ void Engine::createSemaphores() {
 }
 
 void Engine::createFences() {
+    flightImages.resize(swapChainImages.size(), VK_NULL_HANDLE);
     flightFences.resize(MAX_FRAMES_IN_FLIGHT);
 
     VkFenceCreateInfo fenceCreateInfo{};
@@ -680,10 +681,13 @@ void Engine::mainLoop() {
 
 void Engine::drawFrame() {
     vkWaitForFences(logicalDevice, 1, &flightFences[currentFrame], VK_TRUE, UINT64_MAX);
-    vkResetFences(logicalDevice, 1, &flightFences[currentFrame]);
 
     uint32_t imageIndex;
     vkAcquireNextImageKHR(logicalDevice, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+
+    if (flightImages[imageIndex] != VK_NULL_HANDLE)
+        vkWaitForFences(logicalDevice, 1, &flightImages[imageIndex], VK_TRUE, UINT64_MAX);
+    flightImages[imageIndex] = flightImages[currentFrame];
 
     VkSubmitInfo submitInfo{};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -700,6 +704,8 @@ void Engine::drawFrame() {
     VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[currentFrame]};
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = signalSemaphores;
+
+    vkResetFences(logicalDevice, 1, &flightFences[currentFrame]);
 
     if (vkQueueSubmit(graphicsQueue, 1, &submitInfo, flightFences[currentFrame]) != VK_SUCCESS)
         throw std::runtime_error("ERROR: Vulkan failed to submit draw command buffer!");
