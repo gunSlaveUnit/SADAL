@@ -703,8 +703,10 @@ void Engine::drawFrame() {
 }
 
 void Engine::cleanup() {
-    vkDestroySemaphore(logicalDevice, renderFinishedSemaphore, nullptr);
-    vkDestroySemaphore(logicalDevice, imageAvailableSemaphore, nullptr);
+    for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
+        vkDestroySemaphore(logicalDevice, renderFinishedSemaphores[i], nullptr);
+        vkDestroySemaphore(logicalDevice, imageAvailableSemaphores[i], nullptr);
+    }
     vkDestroyCommandPool(logicalDevice, commandPool, nullptr);
     for (auto framebuffer : swapChainFrameBuffers)
         vkDestroyFramebuffer(logicalDevice, framebuffer, nullptr);
