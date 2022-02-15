@@ -6,7 +6,7 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
-add_executable(ShatteredSouls main.cpp engine.cpp engine.h)
+add_executable(ShatteredSouls main.cpp engine/engine.cpp engine/engine.h engine/vertex.cpp engine/vertex.h)
 
 find_package(glm REQUIRED FATAL_ERROR)
 include_directories(${GLM_INCLUDE_DIRS})
