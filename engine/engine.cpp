@@ -628,6 +628,8 @@ void Engine::createVertexBuffer() {
 
     VkMemoryRequirements memoryRequirements;
     vkGetBufferMemoryRequirements(logicalDevice, vertexBuffer, &memoryRequirements);
+
+
 }
 
 uint32_t Engine::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
@@ -635,7 +637,7 @@ uint32_t Engine::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags prope
     vkGetPhysicalDeviceMemoryProperties(physicalDevice, &physicalDeviceMemoryProperties);
 
     for(uint32_t i = 0; i < physicalDeviceMemoryProperties.memoryTypeCount; ++i)
-        if (typeFilter & (1 << i))
+        if (typeFilter & (1 << i) && (physicalDeviceMemoryProperties.memoryTypes[i].propertyFlags & properties) == properties)
             return i;
 
     throw std::runtime_error("ERROR: Failed to find suitable memory type");
