@@ -625,6 +625,20 @@ void Engine::createVertexBuffer() {
 
     if (vkCreateBuffer(logicalDevice, &bufferCreateInfo, nullptr, &vertexBuffer) != VK_SUCCESS)
         throw std::runtime_error("ERROR: Vulkan failed to create vertex buffer");
+
+    VkMemoryRequirements memoryRequirements;
+    vkGetBufferMemoryRequirements(logicalDevice, vertexBuffer, &memoryRequirements);
+}
+
+uint32_t Engine::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
+    VkPhysicalDeviceMemoryProperties physicalDeviceMemoryProperties;
+    vkGetPhysicalDeviceMemoryProperties(physicalDevice, &physicalDeviceMemoryProperties);
+
+    for(uint32_t i = 0; i < physicalDeviceMemoryProperties.memoryTypeCount; ++i)
+        if (typeFilter & (1 << i))
+            return i;
+
+    throw std::runtime_error("ERROR: Failed to find suitable memory type");
 }
 
 void Engine::createCommandBuffers() {

@@ -63,6 +63,7 @@ private:
     void createFrameBuffers();
     void createCommandPool();
     void createVertexBuffer();
+    uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
     void createCommandBuffers();
     void createSemaphores();
     void createFences();
@@ -113,6 +114,7 @@ private:
     size_t currentFrame = 0;
     bool isFramebufferResized = false;
     VkBuffer vertexBuffer;
+    VkDeviceMemory vertexBufferMemory;
 
     const std::string SHADER_COMPILED_DIRECTORY = R"(../shaders/cmpld/)";
 };
