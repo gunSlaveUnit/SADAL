@@ -629,7 +629,18 @@ void Engine::createVertexBuffer() {
     VkMemoryRequirements memoryRequirements;
     vkGetBufferMemoryRequirements(logicalDevice, vertexBuffer, &memoryRequirements);
 
+    VkMemoryAllocateInfo allocateInfo{};
+    allocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    allocateInfo.allocationSize = memoryRequirements.size;
+    allocateInfo.memoryTypeIndex = findMemoryType(
+            memoryRequirements.memoryTypeBits,
+            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
+            );
 
+    if (vkAllocateMemory(logicalDevice, &allocateInfo, nullptr, &vertexBufferMemory) != VK_SUCCESS)
+        throw std::runtime_error("ERROR: Vulkan failed to allocate vertex buffer memory");
+
+    vkBindBufferMemory(logicalDevice, vertexBuffer, vertexBufferMemory, 0);
 }
 
 uint32_t Engine::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
@@ -802,6 +813,7 @@ void Engine::recreateSwapChain() {
 void Engine::cleanup() {
     cleanupSwapChain();
     vkDestroyBuffer(logicalDevice, vertexBuffer, nullptr);
+    vkFreeMemory(logicalDevice, vertexBufferMemory, nullptr);
     for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
         vkDestroySemaphore(logicalDevice, renderFinishedSemaphores[i], nullptr);
         vkDestroySemaphore(logicalDevice, imageAvailableSemaphores[i], nullptr);
