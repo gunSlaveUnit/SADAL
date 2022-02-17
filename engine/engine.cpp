@@ -38,6 +38,7 @@ void Engine::initVulkan() {
     createGraphicsPipeline();
     createFrameBuffers();
     createCommandPool();
+    createVertexBuffer();
     createCommandBuffers();
     createSemaphores();
     createFences();
@@ -609,6 +610,23 @@ void Engine::createCommandPool() {
         throw std::runtime_error("ERROR: Vulkan failed to create command pool");
 }
 
+void Engine::createVertexBuffer() {
+    const std::vector<Vertex> vertices = {
+            {{0.0f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}},
+            {{0.5f, 0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}},
+            {{-0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}}
+    };
+
+    VkBufferCreateInfo bufferCreateInfo;
+    bufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    bufferCreateInfo.size = sizeof(vertices[0]) * vertices.size();
+    bufferCreateInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+    bufferCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+    if (vkCreateBuffer(logicalDevice, &bufferCreateInfo, nullptr, &vertexBuffer) != VK_SUCCESS)
+        throw std::runtime_error("ERROR: Vulkan failed to create vertex buffer");
+}
+
 void Engine::createCommandBuffers() {
     commandBuffers.resize(swapChainFrameBuffers.size());
 
@@ -767,7 +785,7 @@ void Engine::recreateSwapChain() {
 
 void Engine::cleanup() {
     cleanupSwapChain();
-
+    vkDestroyBuffer(logicalDevice, vertexBuffer, nullptr);
     for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
         vkDestroySemaphore(logicalDevice, renderFinishedSemaphores[i], nullptr);
         vkDestroySemaphore(logicalDevice, imageAvailableSemaphores[i], nullptr);
