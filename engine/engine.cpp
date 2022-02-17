@@ -641,6 +641,11 @@ void Engine::createVertexBuffer() {
         throw std::runtime_error("ERROR: Vulkan failed to allocate vertex buffer memory");
 
     vkBindBufferMemory(logicalDevice, vertexBuffer, vertexBufferMemory, 0);
+
+    void* data;
+    vkMapMemory(logicalDevice, vertexBufferMemory, 0, bufferCreateInfo.size, 0, &data);
+    std::memcpy(data, vertices.data(), (size_t) bufferCreateInfo.size);
+    vkUnmapMemory(logicalDevice, vertexBufferMemory);
 }
 
 uint32_t Engine::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
