@@ -19,6 +19,7 @@
 #include <GLFW/glfw3.h>
 
 #include "vertex.h"
+#include "transformation.h"
 
 
 class Engine {
@@ -65,6 +66,7 @@ private:
     void createCommandPool();
     void createVertexBuffer();
     void createIndexBuffer();
+    void createUniformBuffers();
     void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage,
                       VkMemoryPropertyFlags properties,
                       VkBuffer& buffer, VkDeviceMemory& bufferMemory);
@@ -125,6 +127,8 @@ private:
     VkDeviceMemory vertexBufferMemory;
     VkBuffer indexBuffer;
     VkDeviceMemory indexBufferMemory;
+    std::vector<VkBuffer> uniformBuffers;
+    std::vector<VkDeviceMemory> uniformBuffersMemory;
 
     const std::vector<Vertex> vertices = {
             {{-0.5f, -0.5f, 0.0f}, {0.5f, 0.0f, 0.0f}},

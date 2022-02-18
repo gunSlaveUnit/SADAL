@@ -41,6 +41,7 @@ void Engine::initVulkan() {
     createCommandPool();
     createVertexBuffer();
     createIndexBuffer();
+    createUniformBuffers();
     createCommandBuffers();
     createSemaphores();
     createFences();
@@ -674,6 +675,17 @@ void Engine::createIndexBuffer() {
     vkFreeMemory(logicalDevice, stagingBufferMemory, nullptr);
 }
 
+void Engine::createUniformBuffers() {
+    VkDeviceSize bufferSize = sizeof(Transformation);
+
+    uniformBuffers.resize(swapChainImages.size());
+    uniformBuffersMemory.resize(swapChainImages.size());
+
+    for (size_t i = 0; i < swapChainImages.size(); i++) {
+        createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, uniformBuffers[i], uniformBuffersMemory[i]);
+    }
+}
+
 void Engine::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage,
                           VkMemoryPropertyFlags properties,
                           VkBuffer& buffer, VkDeviceMemory& bufferMemory) {
@@ -908,6 +920,7 @@ void Engine::recreateSwapChain() {
     createRenderPass();
     createGraphicsPipeline();
     createFrameBuffers();
+    createUniformBuffers();
     createCommandBuffers();
 }
 
@@ -932,6 +945,10 @@ void Engine::cleanup() {
 }
 
 void Engine::cleanupSwapChain() {
+    for (size_t i = 0; i < swapChainImages.size(); i++) {
+        vkDestroyBuffer(logicalDevice, uniformBuffers[i], nullptr);
+        vkFreeMemory(logicalDevice, uniformBuffersMemory[i], nullptr);
+    }
     for (auto framebuffer : swapChainFrameBuffers)
         vkDestroyFramebuffer(logicalDevice, framebuffer, nullptr);
     vkFreeCommandBuffers(logicalDevice, commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
