@@ -861,6 +861,8 @@ void Engine::drawFrame() {
         vkWaitForFences(logicalDevice, 1, &flightImages[imageIndex], VK_TRUE, UINT64_MAX);
     flightImages[imageIndex] = flightImages[currentFrame];
 
+    updateUniformBuffer(imageIndex);
+
     VkSubmitInfo submitInfo{};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
@@ -901,6 +903,24 @@ void Engine::drawFrame() {
         throw std::runtime_error("ERROR: Vulkan failed to present swap chain image");
 
     currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+}
+
+void Engine::updateUniformBuffer(uint32_t currentImage) {
+    static auto startTime = std::chrono::high_resolution_clock::now();
+
+    auto currentTime = std::chrono::high_resolution_clock::now();
+    float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+
+    Transformation trans{};
+    trans.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    trans.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    trans.projection = glm::perspective(glm::radians(45.0f), swapChainExtent.width / (float) swapChainExtent.height, 0.1f, 10.0f);
+    trans.projection[1][1] *= -1;
+
+    void* data;
+    vkMapMemory(logicalDevice, uniformBuffersMemory[currentImage], 0, sizeof(trans), 0, &data);
+    memcpy(data, &trans, sizeof(trans));
+    vkUnmapMemory(logicalDevice, uniformBuffersMemory[currentImage]);
 }
 
 void Engine::recreateSwapChain() {

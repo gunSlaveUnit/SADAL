@@ -14,9 +14,13 @@
 #include <optional>
 #include <set>
 #include <fstream>
+#include <chrono>
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "vertex.h"
 #include "transformation.h"
@@ -77,6 +81,7 @@ private:
     void createFences();
     void mainLoop();
     void drawFrame();
+    void updateUniformBuffer(uint32_t currentImage);
     void recreateSwapChain();
     void cleanup();
     void cleanupSwapChain();
