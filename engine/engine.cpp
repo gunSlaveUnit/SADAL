@@ -981,7 +981,7 @@ void Engine::cleanup() {
 }
 
 void Engine::cleanupSwapChain() {
-    for (size_t i = 0; i < swapChainImages.size(); i++) {
+    for (size_t i = 0; i < swapChainImages.size(); ++i) {
         vkDestroyBuffer(logicalDevice, uniformBuffers[i], nullptr);
         vkFreeMemory(logicalDevice, uniformBuffersMemory[i], nullptr);
     }
