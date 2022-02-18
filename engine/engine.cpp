@@ -617,36 +617,43 @@ void Engine::createVertexBuffer() {
             {{-0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}}
     };
 
+    VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
+    createBuffer(bufferSize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+                 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                 vertexBuffer, vertexBufferMemory);
+
+    void* data;
+    vkMapMemory(logicalDevice, vertexBufferMemory, 0, bufferSize, 0, &data);
+    std::memcpy(data, vertices.data(), (size_t) bufferSize);
+    vkUnmapMemory(logicalDevice, vertexBufferMemory);
+}
+
+void Engine::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage,
+                          VkMemoryPropertyFlags properties,
+                          VkBuffer& buffer, VkDeviceMemory& bufferMemory) {
     VkBufferCreateInfo bufferCreateInfo{
-        .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
-        .size = sizeof(vertices[0]) * vertices.size(),
-        .usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
-        .sharingMode = VK_SHARING_MODE_EXCLUSIVE
+            .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
+            .size = size,
+            .usage = usage,
+            .sharingMode = VK_SHARING_MODE_EXCLUSIVE
     };
 
-    if (vkCreateBuffer(logicalDevice, &bufferCreateInfo, nullptr, &vertexBuffer) != VK_SUCCESS)
+    if (vkCreateBuffer(logicalDevice, &bufferCreateInfo, nullptr, &buffer) != VK_SUCCESS)
         throw std::runtime_error("ERROR: Vulkan failed to create vertex buffer");
 
     VkMemoryRequirements memoryRequirements;
-    vkGetBufferMemoryRequirements(logicalDevice, vertexBuffer, &memoryRequirements);
+    vkGetBufferMemoryRequirements(logicalDevice, buffer, &memoryRequirements);
 
     VkMemoryAllocateInfo allocateInfo{};
     allocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     allocateInfo.allocationSize = memoryRequirements.size;
     allocateInfo.memoryTypeIndex = findMemoryType(
-            memoryRequirements.memoryTypeBits,
-            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
-            );
+            memoryRequirements.memoryTypeBits,properties);
 
-    if (vkAllocateMemory(logicalDevice, &allocateInfo, nullptr, &vertexBufferMemory) != VK_SUCCESS)
+    if (vkAllocateMemory(logicalDevice, &allocateInfo, nullptr, &bufferMemory) != VK_SUCCESS)
         throw std::runtime_error("ERROR: Vulkan failed to allocate vertex buffer memory");
 
-    vkBindBufferMemory(logicalDevice, vertexBuffer, vertexBufferMemory, 0);
-
-    void* data;
-    vkMapMemory(logicalDevice, vertexBufferMemory, 0, bufferCreateInfo.size, 0, &data);
-    std::memcpy(data, vertices.data(), (size_t) bufferCreateInfo.size);
-    vkUnmapMemory(logicalDevice, vertexBufferMemory);
+    vkBindBufferMemory(logicalDevice, buffer, bufferMemory, 0);
 }
 
 uint32_t Engine::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
