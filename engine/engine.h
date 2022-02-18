@@ -77,6 +77,7 @@ private:
     uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
     void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
     void createDescriptorPool();
+    void createDescriptorSets();
     void createCommandBuffers();
     void createSemaphores();
     void createFences();
@@ -136,6 +137,7 @@ private:
     std::vector<VkBuffer> uniformBuffers;
     std::vector<VkDeviceMemory> uniformBuffersMemory;
     VkDescriptorPool descriptorPool;
+    std::vector<VkDescriptorSet> descriptorSets;
 
     const std::vector<Vertex> vertices = {
             {{-0.5f, -0.5f, 0.0f}, {0.5f, 0.0f, 0.0f}},

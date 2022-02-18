@@ -43,6 +43,7 @@ void Engine::initVulkan() {
     createIndexBuffer();
     createUniformBuffers();
     createDescriptorPool();
+    createDescriptorSets();
     createCommandBuffers();
     createSemaphores();
     createFences();
@@ -775,6 +776,40 @@ void Engine::createDescriptorPool() {
         throw std::runtime_error("ERROR: Vulkan failed to create descriptor pool");
 }
 
+void Engine::createDescriptorSets() {
+    std::vector<VkDescriptorSetLayout> layouts(swapChainImages.size(), descriptorSetLayout);
+    VkDescriptorSetAllocateInfo allocInfo{};
+    allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+    allocInfo.descriptorPool = descriptorPool;
+    allocInfo.descriptorSetCount = static_cast<uint32_t>(swapChainImages.size());
+    allocInfo.pSetLayouts = layouts.data();
+
+    descriptorSets.resize(swapChainImages.size());
+
+    if (vkAllocateDescriptorSets(logicalDevice, &allocInfo, descriptorSets.data()) != VK_SUCCESS)
+        throw std::runtime_error("ERROR: Vulkan failed to allocate descriptor sets");
+
+    for (size_t i = 0; i < swapChainImages.size(); ++i) {
+        VkDescriptorBufferInfo bufferInfo{};
+        bufferInfo.buffer = uniformBuffers[i];
+        bufferInfo.offset = 0;
+        bufferInfo.range = sizeof(Transformation);
+
+        VkWriteDescriptorSet descriptorWrite{};
+        descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        descriptorWrite.dstSet = descriptorSets[i];
+        descriptorWrite.dstBinding = 0;
+        descriptorWrite.dstArrayElement = 0;
+        descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        descriptorWrite.descriptorCount = 1;
+        descriptorWrite.pBufferInfo = &bufferInfo;
+        descriptorWrite.pImageInfo = nullptr;
+        descriptorWrite.pTexelBufferView = nullptr;
+
+        vkUpdateDescriptorSets(logicalDevice, 1, &descriptorWrite, 0, nullptr);
+    }
+}
+
 void Engine::createCommandBuffers() {
     commandBuffers.resize(swapChainFrameBuffers.size());
 
@@ -957,6 +992,7 @@ void Engine::recreateSwapChain() {
     createFrameBuffers();
     createUniformBuffers();
     createDescriptorPool();
+    createDescriptorSets();
     createCommandBuffers();
 }
 
