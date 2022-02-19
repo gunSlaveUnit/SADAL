@@ -151,7 +151,9 @@ private:
             0, 1, 2, 2, 3, 0
     };
 
+    const std::string SHADER_SOURCE_DIRECTORY = R"(../shaders/src/)";
     const std::string SHADER_COMPILED_DIRECTORY = R"(../shaders/cmpld/)";
+    const std::string TEXTURES_SOURCE_DIRECTORY = R"(../textures/)";
 };
 
 
