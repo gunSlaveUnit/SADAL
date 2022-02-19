@@ -141,7 +141,10 @@ bool Engine::isPhysicalDeviceSuitable(VkPhysicalDevice const &device) {
         isSwapChainAdequate = !swapChainSupportDetails.formats.empty() && !swapChainSupportDetails.presentModes.empty();
     }
 
-    return indices.isQueueFamilyAvailable() && areExtensionsSupported && isSwapChainAdequate;
+    VkPhysicalDeviceFeatures supportedFeatures;
+    vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
+
+    return indices.isQueueFamilyAvailable() && areExtensionsSupported && isSwapChainAdequate && supportedFeatures.samplerAnisotropy;
 }
 
 bool Engine::checkDeviceExtensionSupport(VkPhysicalDevice const &device) {
@@ -181,6 +184,7 @@ void Engine::createLogicalDevice() {
     }
 
     VkPhysicalDeviceFeatures deviceFeatures{};
+    deviceFeatures.samplerAnisotropy = VK_TRUE;
 
     VkDeviceCreateInfo deviceCreateInfo{};
     deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
