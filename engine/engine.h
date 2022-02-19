@@ -146,6 +146,8 @@ private:
     std::vector<VkDeviceMemory> uniformBuffersMemory;
     VkDescriptorPool descriptorPool;
     std::vector<VkDescriptorSet> descriptorSets;
+    VkImage textureImage;
+    VkDeviceMemory textureImageMemory;
 
     const std::vector<Vertex> vertices = {
             {{-0.5f, -0.5f, 0.0f}, {0.5f, 0.0f, 0.0f}},
