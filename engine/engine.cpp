@@ -1164,6 +1164,7 @@ void Engine::recreateSwapChain() {
 
 void Engine::cleanup() {
     cleanupSwapChain();
+    vkDestroyImageView(logicalDevice, textureImageView, nullptr);
     vkDestroyImage(logicalDevice, textureImage, nullptr);
     vkFreeMemory(logicalDevice, textureImageMemory, nullptr);
     vkDestroyDescriptorSetLayout(logicalDevice, descriptorSetLayout, nullptr);
