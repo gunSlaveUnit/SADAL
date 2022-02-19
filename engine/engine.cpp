@@ -39,6 +39,7 @@ void Engine::initVulkan() {
     createGraphicsPipeline();
     createFrameBuffers();
     createCommandPool();
+    createTexture();
     createVertexBuffer();
     createIndexBuffer();
     createUniformBuffers();
@@ -630,6 +631,21 @@ void Engine::createCommandPool() {
 
     if (vkCreateCommandPool(logicalDevice, &commandPoolInfo, nullptr, &commandPool) != VK_SUCCESS)
         throw std::runtime_error("ERROR: Vulkan failed to create command pool");
+}
+
+void Engine::createTexture() {
+    const std::string textureFilename("stone_rock.jpg");
+    const std::string textureFullPath = TEXTURES_SOURCE_DIRECTORY + textureFilename;
+    const char* textureWay = textureFullPath.c_str();
+
+    int width, height, channelsAmount;
+    stbi_uc* pixels = stbi_load(textureWay, &width, &height, &channelsAmount, STBI_rgb);
+
+    VkDeviceSize textureSize = width * height * 4;
+
+    if (!pixels) {
+        throw std::runtime_error("ERROR: stb_image failed to load texture image");
+    }
 }
 
 void Engine::createVertexBuffer() {
