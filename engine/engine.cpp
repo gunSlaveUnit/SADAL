@@ -634,18 +634,17 @@ void Engine::createCommandPool() {
 }
 
 void Engine::createTexture() {
-    const std::string textureFilename("stone_rock.jpg");
+    const std::string textureFilename("blue_crystal.jpg");
     const std::string textureFullPath = TEXTURES_SOURCE_DIRECTORY + textureFilename;
     const char* textureWay = textureFullPath.c_str();
 
     int width, height, channelsAmount;
-    stbi_uc* pixels = stbi_load(textureWay, &width, &height, &channelsAmount, STBI_rgb);
+    stbi_uc* pixels = stbi_load(textureWay, &width, &height, &channelsAmount, STBI_rgb_alpha);
 
     VkDeviceSize textureSize = width * height * 4;
 
-    if (!pixels) {
+    if (!pixels)
         throw std::runtime_error("ERROR: stb_image failed to load texture image");
-    }
 }
 
 void Engine::createVertexBuffer() {
