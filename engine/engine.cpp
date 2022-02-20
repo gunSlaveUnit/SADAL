@@ -661,10 +661,6 @@ VkFormat Engine::findSupportedFormat(const std::vector<VkFormat>& candidates, Vk
     throw std::runtime_error("ERROR: failed to find supported format");
 }
 
-bool Engine::hasStencilComponent(VkFormat format) {
-    return format == VK_FORMAT_D32_SFLOAT_S8_UINT || format == VK_FORMAT_D24_UNORM_S8_UINT;
-}
-
 void Engine::createTexture() {
     const std::string textureFilename("blue_crystal.jpg");
     const std::string textureFullPath = TEXTURES_SOURCE_DIRECTORY + textureFilename;
@@ -746,7 +742,16 @@ void Engine::transitionImageLayout(VkImage image, VkFormat format, VkImageLayout
     barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
     barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
     barrier.image = image;
+
+    if (newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL) {
+        barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+
+        if (hasStencilComponent(format))
+            barrier.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
+    } else
+        barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
     barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+
     barrier.subresourceRange.baseMipLevel = 0;
     barrier.subresourceRange.levelCount = 1;
     barrier.subresourceRange.baseArrayLayer = 0;
@@ -780,6 +785,10 @@ void Engine::transitionImageLayout(VkImage image, VkFormat format, VkImageLayout
     );
 
     endSingleTimeCommands(commandBuffer);
+}
+
+bool Engine::hasStencilComponent(VkFormat format) {
+    return format == VK_FORMAT_D32_SFLOAT_S8_UINT || format == VK_FORMAT_D24_UNORM_S8_UINT;
 }
 
 void Engine::copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height) {
