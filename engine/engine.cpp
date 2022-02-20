@@ -39,6 +39,7 @@ void Engine::initVulkan() {
     createGraphicsPipeline();
     createFrameBuffers();
     createCommandPool();
+    createDepthResources();
     createTexture();
     createTextureImageView();
     createTextureSampler();
@@ -627,6 +628,10 @@ void Engine::createCommandPool() {
 
     if (vkCreateCommandPool(logicalDevice, &commandPoolInfo, nullptr, &commandPool) != VK_SUCCESS)
         throw std::runtime_error("ERROR: Vulkan failed to create command pool");
+}
+
+void Engine::createDepthResources() {
+
 }
 
 void Engine::createTexture() {

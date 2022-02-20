@@ -19,6 +19,7 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 #define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "stb_image.h"
@@ -69,6 +70,7 @@ private:
     VkRect2D createScissor();
     void createFrameBuffers();
     void createCommandPool();
+    void createDepthResources();
     void createTexture();
     void createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage,
                      VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
@@ -153,6 +155,10 @@ private:
     VkDeviceMemory textureImageMemory;
     VkImageView textureImageView;
     VkSampler textureSampler;
+
+    VkImage depthImage;
+    VkDeviceMemory depthImageMemory;
+    VkImageView depthImageView;
 
     const std::vector<Vertex> vertices = {
             {{-0.5f, -0.5f, 0.0f}, {0.5f, 0.0f, 0.0f}, {1.0f, 0.0f}},
