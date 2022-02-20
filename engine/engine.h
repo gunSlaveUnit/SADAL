@@ -71,6 +71,9 @@ private:
     void createFrameBuffers();
     void createCommandPool();
     void createDepthResources();
+    VkFormat findDepthFormat();
+    VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
+    bool hasStencilComponent(VkFormat format);
     void createTexture();
     void createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage,
                      VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
