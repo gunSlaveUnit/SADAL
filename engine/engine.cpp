@@ -1328,6 +1328,9 @@ void Engine::cleanup() {
 }
 
 void Engine::cleanupSwapChain() {
+    vkDestroyImageView(logicalDevice, depthImageView, nullptr);
+    vkDestroyImage(logicalDevice, depthImage, nullptr);
+    vkFreeMemory(logicalDevice, depthImageMemory, nullptr);
     for (size_t i = 0; i < swapChainImages.size(); ++i) {
         vkDestroyBuffer(logicalDevice, uniformBuffers[i], nullptr);
         vkFreeMemory(logicalDevice, uniformBuffersMemory[i], nullptr);
