@@ -1282,7 +1282,6 @@ void Engine::updateUniformBuffer(uint32_t currentImage) {
 
 void Engine::recreateSwapChain() {
     int width = 0, height = 0;
-    glfwGetFramebufferSize(window, &width, &height);
     while (width == 0 || height == 0) {
         glfwGetFramebufferSize(window, &width, &height);
         glfwWaitEvents();
@@ -1296,6 +1295,7 @@ void Engine::recreateSwapChain() {
     createImageViews();
     createRenderPass();
     createGraphicsPipeline();
+    createDepthResources();
     createFrameBuffers();
     createUniformBuffers();
     createDescriptorPool();
