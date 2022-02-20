@@ -68,11 +68,11 @@ private:
     VkShaderModule createShaderModule(const std::vector<char>& code);
     VkViewport createViewport();
     VkRect2D createScissor();
-    void createFrameBuffers();
     void createCommandPool();
     void createDepthResources();
     VkFormat findDepthFormat();
     VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
+    void createFrameBuffers();
     void createTexture();
     void createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage,
                      VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);

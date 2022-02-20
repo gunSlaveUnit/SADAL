@@ -37,9 +37,9 @@ void Engine::initVulkan() {
     createRenderPass();
     createDescriptorSetLayout();
     createGraphicsPipeline();
-    createFrameBuffers();
     createCommandPool();
     createDepthResources();
+    createFrameBuffers();
     createTexture();
     createTextureImageView();
     createTextureSampler();
@@ -613,27 +613,6 @@ VkRect2D Engine::createScissor() {
     return scissor;
 }
 
-void Engine::createFrameBuffers() {
-    size_t imagesCount = swapChainImageViews.size();
-    swapChainFrameBuffers.resize(swapChainImageViews.size());
-
-    for(size_t i = 0; i < imagesCount; ++i) {
-        VkImageView attachments[] = {swapChainImageViews[i] };
-
-        VkFramebufferCreateInfo framebufferInfo{};
-        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        framebufferInfo.renderPass = renderPass;
-        framebufferInfo.attachmentCount = sizeof(attachments) / sizeof(attachments[0]);
-        framebufferInfo.pAttachments = attachments;
-        framebufferInfo.width = swapChainExtent.width;
-        framebufferInfo.height = swapChainExtent.height;
-        framebufferInfo.layers = 1;
-
-        if(vkCreateFramebuffer(logicalDevice, &framebufferInfo, nullptr, &swapChainFrameBuffers[i]) != VK_SUCCESS)
-            throw std::runtime_error("ERROR: Vulkan failed to create frame buffer");
-    }
-}
-
 void Engine::createCommandPool() {
     QueueFamilyIndices queueFamilyIndices = findQueueFamilies(physicalDevice);
 
@@ -675,6 +654,30 @@ VkFormat Engine::findSupportedFormat(const std::vector<VkFormat>& candidates, Vk
     }
 
     throw std::runtime_error("ERROR: failed to find supported format");
+}
+
+void Engine::createFrameBuffers() {
+    size_t imagesCount = swapChainImageViews.size();
+    swapChainFrameBuffers.resize(swapChainImageViews.size());
+
+    for(size_t i = 0; i < imagesCount; ++i) {
+        std::array<VkImageView, 2> attachments = {
+                swapChainImageViews[i],
+                depthImageView
+        };
+
+        VkFramebufferCreateInfo framebufferInfo{};
+        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        framebufferInfo.renderPass = renderPass;
+        framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
+        framebufferInfo.pAttachments = attachments.data();
+        framebufferInfo.width = swapChainExtent.width;
+        framebufferInfo.height = swapChainExtent.height;
+        framebufferInfo.layers = 1;
+
+        if(vkCreateFramebuffer(logicalDevice, &framebufferInfo, nullptr, &swapChainFrameBuffers[i]) != VK_SUCCESS)
+            throw std::runtime_error("ERROR: Vulkan failed to create frame buffer");
+    }
 }
 
 void Engine::createTexture() {
