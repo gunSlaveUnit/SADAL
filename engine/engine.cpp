@@ -694,7 +694,7 @@ void Engine::createFrameBuffers() {
 }
 
 void Engine::createTexture() {
-    const std::string textureFilename("blue_crystal.jpg");
+    const std::string textureFilename("handgun.jpg");
     const std::string textureFullPath = TEXTURES_SOURCE_DIRECTORY + textureFilename;
     const char* textureWay = textureFullPath.c_str();
 
