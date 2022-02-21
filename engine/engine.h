@@ -146,6 +146,9 @@ private:
     size_t currentFrame = 0;
     bool isFramebufferResized = false;
 
+    std::vector<Vertex> vertices;
+    std::vector<uint32_t> indices;
+
     VkBuffer vertexBuffer;
     VkDeviceMemory vertexBufferMemory;
     VkBuffer indexBuffer;
@@ -162,22 +165,6 @@ private:
     VkImage depthImage;
     VkDeviceMemory depthImageMemory;
     VkImageView depthImageView;
-
-    const std::vector<Vertex> vertices = {
-            {{-0.5f, -0.5f, 0.0f}, {0.5f, 0.0f, 0.0f}, {1.0f, 0.0f}},
-            {{0.5f, -0.5f, 0.0f}, {0.5f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-            {{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 0.5f}, {0.0f, 1.0f}},
-            {{-0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 0.5f}, {1.0f, 1.0f}},
-
-            {{-0.75f, -0.75f, -0.5f}, {0.5f, 0.0f, 0.0f}, {1.0f, 0.0f}},
-            {{0.25f, -0.75f, -0.5f}, {0.5f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-            {{0.25f, 0.25f, -0.5f}, {0.0f, 0.0f, 0.5f}, {0.0f, 1.0f}},
-            {{-0.75f, 0.25f, -0.5f}, {0.0f, 0.0f, 0.5f}, {1.0f, 1.0f}},
-    };
-    const std::vector<uint32_t> indices = {
-            0, 1, 2, 2, 3, 0,
-            4, 5, 6, 6, 7, 4
-    };
 
     const std::string SHADER_SOURCE_DIRECTORY = R"(../shaders/src/)";
     const std::string SHADER_COMPILED_DIRECTORY = R"(../shaders/cmpld/)";
