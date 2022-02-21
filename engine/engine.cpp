@@ -695,7 +695,7 @@ void Engine::createFrameBuffers() {
 }
 
 void Engine::createTexture() {
-    const std::string textureFilename("handgun.jpg");
+    const std::string textureFilename("viking.png");
     const std::string textureFullPath = TEXTURES_SOURCE_DIRECTORY + textureFilename;
     const char* textureWay = textureFullPath.c_str();
 
@@ -911,7 +911,7 @@ void Engine::createTextureSampler() {
 }
 
 void Engine::loadModel() {
-    const std::string modelFilename("handgun.obj");
+    const std::string modelFilename("viking.obj");
     const std::string modelFullPath = MODELS_SOURCE_DIRECTORY + modelFilename;
     const char* modelWay = modelFullPath.c_str();
 
