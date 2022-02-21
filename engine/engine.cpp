@@ -43,6 +43,7 @@ void Engine::initVulkan() {
     createTexture();
     createTextureImageView();
     createTextureSampler();
+    loadModel();
     createVertexBuffer();
     createIndexBuffer();
     createUniformBuffers();
@@ -908,6 +909,42 @@ void Engine::createTextureSampler() {
 
     if (vkCreateSampler(logicalDevice, &samplerInfo, nullptr, &textureSampler) != VK_SUCCESS)
         throw std::runtime_error("ERROR: Vulkan failed to create texture sampler");
+}
+
+void Engine::loadModel() {
+    const std::string modelFilename("handgun.obj");
+    const std::string modelFullPath = MODELS_SOURCE_DIRECTORY + modelFilename;
+    const char* modelWay = modelFullPath.c_str();
+
+    tinyobj::attrib_t attrib;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+    std::string warn, err;
+
+    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, modelWay))
+        throw std::runtime_error("ERROR: Tiny OBJ Loader failed to load model: " + warn + err);
+
+    for (const auto& shape : shapes) {
+        for (const auto& index : shape.mesh.indices) {
+            Vertex vertex{};
+
+            vertices.push_back(vertex);
+            indices.push_back(indices.size());
+
+            vertex.position = {
+                    attrib.vertices[3 * index.vertex_index + 0],
+                    attrib.vertices[3 * index.vertex_index + 1],
+                    attrib.vertices[3 * index.vertex_index + 2]
+            };
+
+            vertex.textureCoordinates = {
+                    attrib.texcoords[2 * index.texcoord_index + 0],
+                    1.0f - attrib.texcoords[2 * index.texcoord_index + 1]
+            };
+
+            vertex.color = {1.0f, 1.0f, 1.0f};
+        }
+    }
 }
 
 void Engine::createVertexBuffer() {

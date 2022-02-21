@@ -83,6 +83,7 @@ private:
     void createTextureImageView();
     VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
     void createTextureSampler();
+    void loadModel();
     void createVertexBuffer();
     void createIndexBuffer();
     void createUniformBuffers();
