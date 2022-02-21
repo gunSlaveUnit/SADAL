@@ -929,9 +929,6 @@ void Engine::loadModel() {
         for (const auto& index : shape.mesh.indices) {
             Vertex vertex{};
 
-            vertices.push_back(vertex);
-            indices.push_back(indices.size());
-
             vertex.position = {
                     attrib.vertices[3 * index.vertex_index + 0],
                     attrib.vertices[3 * index.vertex_index + 1],
