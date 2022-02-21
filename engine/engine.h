@@ -15,6 +15,7 @@
 #include <set>
 #include <fstream>
 #include <chrono>
+#include <unordered_map>
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>

@@ -923,6 +923,8 @@ void Engine::loadModel() {
     if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, modelWay))
         throw std::runtime_error("ERROR: Tiny OBJ Loader failed to load model: " + warn + err);
 
+    std::unordered_map<Vertex, uint32_t> uniqueVertices{};
+
     for (const auto& shape : shapes) {
         for (const auto& index : shape.mesh.indices) {
             Vertex vertex{};
@@ -942,6 +944,13 @@ void Engine::loadModel() {
             };
 
             vertex.color = {1.0f, 1.0f, 1.0f};
+
+            if (uniqueVertices.count(vertex) == 0) {
+                uniqueVertices[vertex] = static_cast<uint32_t>(vertices.size());
+                vertices.push_back(vertex);
+            }
+
+            indices.push_back(uniqueVertices[vertex]);
         }
     }
 }
