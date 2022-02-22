@@ -702,6 +702,9 @@ void Engine::createTexture() {
     int width, height, channelsAmount;
     stbi_uc* pixels = stbi_load(textureWay, &width, &height, &channelsAmount, STBI_rgb_alpha);
 
+    /* 1 is added so that the original image has a mip level */
+    mipmapLevelsAmount = static_cast<uint32_t>(std::floor(std::log2(std::max(width, height)))) + 1;
+
     VkDeviceSize textureSize = width * height * 4;
 
     if (!pixels)
