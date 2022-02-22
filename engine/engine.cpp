@@ -704,6 +704,12 @@ void Engine::createTexture() {
 
     VkDeviceSize textureSize = width * height * 4;
 
+    /* 1 is added so that the original image has a mip level */
+    int max = std::max(width, height);
+    double logMax = log2(max);
+    double flooredLogMax = std::floor(logMax);
+    mipmapLevelsAmount = static_cast<uint32_t>(flooredLogMax) + 1;
+
     if (!pixels)
         throw std::runtime_error("ERROR: stb_image failed to load texture image");
 
