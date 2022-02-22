@@ -77,7 +77,7 @@ private:
     void createFrameBuffers();
     void createTexture();
     void generateMipmaps(VkImage image, VkFormat imageFormat, const uint32_t texWidth, uint32_t texHeight, uint32_t mipmapLevels);
-    void createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage,
+    void createImage(uint32_t width, uint32_t height, uint32_t mipLevels, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage,
                      VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
     void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout,
                                const uint32_t& mipLevels);
