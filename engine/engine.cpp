@@ -735,12 +735,16 @@ void Engine::createTexture() {
     vkDestroyBuffer(logicalDevice, stagingBuffer, nullptr);
     vkFreeMemory(logicalDevice, stagingBufferMemory, nullptr);
 
-    generateMipmaps(textureImage, width, height, mipmapLevelsAmount);
+    generateMipmaps(textureImage, VK_FORMAT_R8G8B8A8_SRGB, width, height, mipmapLevelsAmount);
 }
 
-void Engine::generateMipmaps(VkImage image, uint32_t texWidth, uint32_t texHeight,
+void Engine::generateMipmaps(VkImage image, VkFormat imageFormat, uint32_t texWidth, uint32_t texHeight,
                              const uint32_t mipmapLevels) {
+    VkFormatProperties formatProperties;
+    vkGetPhysicalDeviceFormatProperties(physicalDevice, imageFormat, &formatProperties);
 
+    if (!(formatProperties.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT))
+        throw std::runtime_error("ERROR: texture image format does not support linear blitting!");
 
     VkCommandBuffer commandBuffer = beginSingleTimeCommands();
 
