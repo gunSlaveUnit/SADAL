@@ -1489,6 +1489,10 @@ void Engine::cleanup() {
 }
 
 void Engine::cleanupSwapChain() {
+    vkDestroyImageView(logicalDevice, colorImageView, nullptr);
+    vkDestroyImage(logicalDevice, colorImage, nullptr);
+    vkFreeMemory(logicalDevice, colorImageMemory, nullptr);
+
     vkDestroyImageView(logicalDevice, depthImageView, nullptr);
     vkDestroyImage(logicalDevice, depthImage, nullptr);
     vkFreeMemory(logicalDevice, depthImageMemory, nullptr);
