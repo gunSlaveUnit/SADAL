@@ -717,9 +717,9 @@ void Engine::createFrameBuffers() {
 
     for(size_t i = 0; i < imagesCount; ++i) {
         std::array<VkImageView, 3> attachments = {
-                swapChainImageViews[i],
+                colorImageView,
                 depthImageView,
-                colorImageView
+                swapChainImageViews[i]
         };
 
         VkFramebufferCreateInfo framebufferInfo{};
