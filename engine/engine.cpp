@@ -982,7 +982,8 @@ void Engine::createTextureSampler() {
     samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
     samplerInfo.mipLodBias = 0.0f;
     samplerInfo.minLod = 0.0f;
-    samplerInfo.maxLod = 0.0f;
+    samplerInfo.maxLod = static_cast<float>(mipmapLevelsAmount);
+    samplerInfo.mipLodBias = 0.0f;
 
     if (vkCreateSampler(logicalDevice, &samplerInfo, nullptr, &textureSampler) != VK_SUCCESS)
         throw std::runtime_error("ERROR: Vulkan failed to create texture sampler");
