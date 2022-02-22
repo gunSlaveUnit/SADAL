@@ -72,6 +72,7 @@ private:
     VkViewport createViewport();
     VkRect2D createScissor();
     void createCommandPool();
+    void createColorResources();
     void createDepthResources();
     VkFormat findDepthFormat();
     VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
