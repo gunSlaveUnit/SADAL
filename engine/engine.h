@@ -42,6 +42,7 @@ private:
     void pickPhysicalDevice();
     bool isPhysicalDeviceSuitable(const VkPhysicalDevice& device);
     bool checkDeviceExtensionSupport(const VkPhysicalDevice& device);
+    VkSampleCountFlagBits getMaxUsableSampleCount();
     void createLogicalDevice();
     struct QueueFamilyIndices {
         [[nodiscard]] bool isQueueFamilyAvailable() const {
