@@ -172,6 +172,8 @@ private:
     VkDeviceMemory depthImageMemory;
     VkImageView depthImageView;
 
+    VkSampleCountFlagBits MSAASamples;
+
     const std::string SHADER_SOURCE_DIRECTORY = R"(../shaders/src/)";
     const std::string SHADER_COMPILED_DIRECTORY = R"(../shaders/cmpld/)";
     const std::string TEXTURES_SOURCE_DIRECTORY = R"(../textures/)";

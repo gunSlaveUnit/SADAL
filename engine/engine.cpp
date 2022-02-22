@@ -126,6 +126,7 @@ void Engine::pickPhysicalDevice() {
     for(const auto& device : physicalDevices)
         if(isPhysicalDeviceSuitable(device)) {
             physicalDevice = device;
+            MSAASamples = getMaxUsableSampleCount();
             break;
         }
 
