@@ -702,10 +702,10 @@ void Engine::createTexture() {
     int width, height, channelsAmount;
     stbi_uc* pixels = stbi_load(textureWay, &width, &height, &channelsAmount, STBI_rgb_alpha);
 
-    /* 1 is added so that the original image has a mip level */
     int max = std::max(width, height);
     double logMax = log2(max);
     double flooredLogMax = std::floor(logMax);
+    /* 1 is added so that the original image has a mip level */
     mipmapLevelsAmount = static_cast<uint32_t>(flooredLogMax) + 1;
 
     VkDeviceSize textureSize = width * height * 4;
