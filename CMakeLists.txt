@@ -6,7 +6,7 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
-add_executable(${PROJECT_NAME} main.cpp engine/engine.cpp engine/engine.h engine/vertex.cpp engine/vertex.h engine/transformation.h engine/stb_image.h engine/stb_image.cpp engine/tiny_obj_loader.h engine/tiny_obj_loader.cpp)
+add_executable(${PROJECT_NAME} main.cpp engine/engine.cpp engine/engine.h engine/vertex.cpp engine/vertex.h engine/transformation.h engine/external/stb_image.h engine/external/stb_image.cpp engine/external/tiny_obj_loader.h engine/external/tiny_obj_loader.cpp)
 
 find_package(glm REQUIRED FATAL_ERROR)
 include_directories(${GLM_INCLUDE_DIRS})

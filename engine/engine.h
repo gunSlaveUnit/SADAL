@@ -23,8 +23,8 @@
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "stb_image.h"
-#include "tiny_obj_loader.h"
+#include "external/stb_image.h"
+#include "external/tiny_obj_loader.h"
 
 #include "vertex.h"
 #include "transformation.h"
