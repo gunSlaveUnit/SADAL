@@ -59,13 +59,15 @@ void Engine::createInstance() {
     if(enableValidationLayers && !checkValidationLayerSupport())
         throw std::runtime_error("ERROR: Vulkan validation layers requested, but not available");
 
-    VkApplicationInfo appInfo{};
-    appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    appInfo.pEngineName = "No engine";
-    appInfo.engineVersion = VK_MAKE_VERSION(0, 0, 1);
-    appInfo.pApplicationName = WINDOW_TITLE;
-    appInfo.applicationVersion = VK_MAKE_VERSION(0, 0, 1);
-    appInfo.apiVersion = VK_API_VERSION_1_2;
+    VkApplicationInfo appInfo {
+        .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
+        .pNext = nullptr,
+        .pApplicationName = WINDOW_TITLE,
+        .applicationVersion = VK_MAKE_VERSION(0, 0, 1),
+        .pEngineName = "SADAL",
+        .engineVersion = VK_MAKE_VERSION(0, 0, 1),
+        .apiVersion = VK_API_VERSION_1_2
+    };
 
     VkInstanceCreateInfo createInfo{};
     createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
