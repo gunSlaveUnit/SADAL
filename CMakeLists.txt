@@ -1,24 +1,24 @@
 cmake_minimum_required(VERSION 3.21)
-project(ShatteredSouls)
+project(SADAL)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
-add_executable(ShatteredSouls main.cpp engine/engine.cpp engine/engine.h engine/vertex.cpp engine/vertex.h engine/transformation.h engine/stb_image.h engine/stb_image.cpp engine/tiny_obj_loader.h engine/tiny_obj_loader.cpp)
+add_executable(${PROJECT_NAME} main.cpp engine/engine.cpp engine/engine.h engine/vertex.cpp engine/vertex.h engine/transformation.h engine/stb_image.h engine/stb_image.cpp engine/tiny_obj_loader.h engine/tiny_obj_loader.cpp)
 
 find_package(glm REQUIRED FATAL_ERROR)
 include_directories(${GLM_INCLUDE_DIRS})
 link_directories(${GLM_LIBRARY_DIRS})
 
 find_package(glfw3 REQUIRED FATAL_ERROR)
-target_link_libraries(ShatteredSouls glfw)
+target_link_libraries(${PROJECT_NAME} glfw)
 
 find_package(Vulkan REQUIRED FATAL_ERROR)
 if (VULKAN_FOUND)
-    target_include_directories (ShatteredSouls PUBLIC ${VULKAN_INCLUDE_DIR})
-    target_link_libraries (ShatteredSouls ${Vulkan_LIBRARY})
+    target_include_directories (${PROJECT_NAME} PUBLIC ${VULKAN_INCLUDE_DIR})
+    target_link_libraries (${PROJECT_NAME} ${Vulkan_LIBRARY})
 endif()
 
 set(GLSLC_PATH /usr/bin/glslc)

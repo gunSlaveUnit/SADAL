@@ -112,7 +112,7 @@ private:
 
     const uint16_t WINDOW_WIDTH = 800;
     const uint16_t WINDOW_HEIGHT = 600;
-    const char* WINDOW_TITLE = "Shattered Souls";
+    const char* WINDOW_TITLE = "SADAL";
     GLFWwindow* window;
 
     VkInstance instance;
