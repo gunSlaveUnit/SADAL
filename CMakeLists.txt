@@ -15,6 +15,8 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 if(UNIX)
     find_package(glfw3 REQUIRED FATAL_ERROR)
     target_link_libraries(${PROJECT_NAME} glfw)
+
+    set(GLSLC_PATH /usr/bin/glslc)
 endif(UNIX)
 
 if(WIN32)
@@ -24,6 +26,8 @@ if(WIN32)
     target_link_libraries(${PROJECT_NAME} glfw)
     find_package(OpenGL REQUIRED)
     target_link_libraries(${PROJECT_NAME} OpenGL::GL)
+
+    set(GLSLC_PATH C:/VulkanSDK/1.3.204.0/Bin/glslc.exe)
 endif(WIN32)
 
 find_package(glm REQUIRED FATAL_ERROR)
@@ -37,7 +41,6 @@ if (VULKAN_FOUND)
     target_link_libraries(${PROJECT_NAME} Vulkan::Vulkan)
 endif()
 
-set(GLSLC_PATH /usr/bin/glslc)
 set(SHSL_SHADER_SOURCE_DIRECTORY ${CMAKE_SOURCE_DIR}/shaders/src)
 set(SHSL_SHADER_COMPILED_DIRECTORY ${CMAKE_SOURCE_DIR}/shaders/cmpld)
 
