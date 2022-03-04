@@ -19,6 +19,7 @@ endif(UNIX)
 
 if(WIN32)
     set(glm_DIR C:/GLM/cmake/glm)
+
     add_subdirectory(GLFW)
     target_link_libraries(${PROJECT_NAME} glfw)
     find_package(OpenGL REQUIRED)
@@ -31,8 +32,9 @@ link_directories(${GLM_LIBRARY_DIRS})
 
 find_package(Vulkan REQUIRED FATAL_ERROR)
 if (VULKAN_FOUND)
-    target_include_directories (${PROJECT_NAME} PUBLIC ${VULKAN_INCLUDE_DIR})
-    target_link_libraries (${PROJECT_NAME} ${Vulkan_LIBRARY})
+    find_package(Vulkan REQUIRED)
+    target_include_directories(${PROJECT_NAME} PUBLIC ${Vulkan_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME} Vulkan::Vulkan)
 endif()
 
 set(GLSLC_PATH /usr/bin/glslc)
