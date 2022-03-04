@@ -8,12 +8,26 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 add_executable(${PROJECT_NAME} main.cpp engine/engine.cpp engine/engine.h engine/vertex.cpp engine/vertex.h engine/transformation.h engine/external/stb_image.h engine/external/stb_image.cpp engine/external/tiny_obj_loader.h engine/external/tiny_obj_loader.cpp)
 
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+if(UNIX)
+    find_package(glfw3 REQUIRED FATAL_ERROR)
+    target_link_libraries(${PROJECT_NAME} glfw)
+endif(UNIX)
+
+if(WIN32)
+    set(glm_DIR C:/GLM/cmake/glm)
+    add_subdirectory(GLFW)
+    target_link_libraries(${PROJECT_NAME} glfw)
+    find_package(OpenGL REQUIRED)
+    target_link_libraries(${PROJECT_NAME} OpenGL::GL)
+endif(WIN32)
+
 find_package(glm REQUIRED FATAL_ERROR)
 include_directories(${GLM_INCLUDE_DIRS})
 link_directories(${GLM_LIBRARY_DIRS})
-
-find_package(glfw3 REQUIRED FATAL_ERROR)
-target_link_libraries(${PROJECT_NAME} glfw)
 
 find_package(Vulkan REQUIRED FATAL_ERROR)
 if (VULKAN_FOUND)
